@@ -52,6 +52,11 @@ circle.node.reflexive {
   stroke-width: 2.5px;
 }
 
+repeaters.nodes {
+  stroke-width: 10px;
+  cursor: pointer;
+}
+
 text {
   font: 12px sans-serif;
   pointer-events: none;

@@ -9,6 +9,9 @@ import './index.css';
 
 // set up SVG for D3
 
+
+class 
+
 const d3 = require('d3')
 const width = 960;
 const height = 500;
@@ -34,6 +37,12 @@ const links = [
   { source: nodes[0], target: nodes[1], left: false, right: true },
   { source: nodes[1], target: nodes[2], left: false, right: true }
 ];
+
+////////////
+const repeater = [
+  { id:0, reflexive: false, nodes: nodes.filter(node => node.id < 3) }
+]
+////////////
 
 // init D3 force layout
 const force = d3.forceSimulation()
@@ -93,6 +102,7 @@ const dragLine = svg.append('svg:path')
 // handles to link and node element groups
 let path = svg.append('svg:g').selectAll('path');
 let circle = svg.append('svg:g').selectAll('g');
+let repeaters = svg.append('svg:g').selectAll('circle')
 
 // mouse event vars
 let selectedNode = null;
@@ -106,6 +116,15 @@ function resetMouseVars() {
   mouseupNode = null;
   mousedownLink = null;
 }
+
+////////////////
+function rptr(nodes) {
+  circle.attr('d', (d)=>{
+    const deltaX = d.target.x - d.source.x
+    const deltaY = d.target.y - d.source.y
+  })
+}
+////////////////
 
 // update force layout (called automatically each iteration)
 function tick() {
@@ -126,7 +145,8 @@ function tick() {
     return `M${sourceX},${sourceY}L${targetX},${targetY}`;
   });
 
-  circle.attr('transform', (d) => `translate(${d.x},${d.y})`);
+  //circle.attr('transform', (d) => `translate(${d.x},${d.y})`);
+  repeaters.attr('transform', (d) => `translate(${d.x},${d.y})`)
 }
 
 // update graph (called when needed)
@@ -163,10 +183,15 @@ function restart() {
   // NB: the function arg is crucial here! nodes are known by id, not by index!
   circle = circle.data(nodes, (d) => d.id);
 
+
   // update existing nodes (reflexive & selected visual states)
   circle.selectAll('circle')
     .style('fill', (d) => (d === selectedNode) ? d3.rgb(colors(d.id)).brighter().toString() : colors(d.id))
     .classed('reflexive', (d) => d.reflexive);
+
+  repeaters.selectAll('repeaters')
+    .style('fill', (d) => (d === selectedNode) ? d3.rgb(colors(d.id)).brighter().toString() : colors(d.id))
+    .classed('reflexive', (d) => d.reflexive)
 
   // remove old nodes
   circle.exit().remove();
@@ -181,17 +206,17 @@ function restart() {
     .style('stroke', (d) => d3.rgb(colors(d.id)).darker().toString())
     .classed('reflexive', (d) => d.reflexive)
     .on('mouseover', function (d) {
-      if (!mousedownNode || d === mousedownNode) return;
+      if (!mousedownNode || d === mousedownNode) return console.log("mouseover");
       // enlarge target node
       d3.select(this).attr('transform', 'scale(1.1)');
     })
     .on('mouseout', function (d) {
-      if (!mousedownNode || d === mousedownNode) return;
+      if (!mousedownNode || d === mousedownNode) return console.log("mouseout");
       // unenlarge target node
       d3.select(this).attr('transform', '');
     })
     .on('mousedown', (d) => {
-      if (d3.event.ctrlKey) return;
+      if (d3.event.ctrlKey) return console.log("mousedown");
 
       // select node
       mousedownNode = d;
@@ -207,7 +232,7 @@ function restart() {
       restart();
     })
     .on('mouseup', function (d) {
-      if (!mousedownNode) return;
+      if (!mousedownNode) return console.log("mouseup");
 
       // needed by FF
       dragLine
@@ -251,6 +276,7 @@ function restart() {
     .text((d) => d.id);
 
   circle = g.merge(circle);
+  repeaters = g.merge(repeaters)
 
   // set the graph in motion
   force
