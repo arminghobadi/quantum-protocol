@@ -10,7 +10,7 @@ public class QuantumMemory {
 	private final float LOSS_ = 0;
 	public Repeater parent;
 	public Qubit qubit;
-	//the red circles
+	//the red circles 
 	
 	public QuantumMemory(Repeater r) {
 		this(r, new Qubit());

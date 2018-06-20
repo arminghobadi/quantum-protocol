@@ -32,6 +32,15 @@ public class Repeater {
 		this.nodes = nodes;
 	}
 	
+	public void deleteItselfFromAllNeighbourList() {
+		for (int i = 0 ; i < allNeighbours.size() ; i++) {
+			if ( QuantumNetwork.findRepeater(allNeighbours.get(i).source.getId()).getId() == this.getId()) {
+				System.out.println(this + " found it. its" + allNeighbours.get(i));
+				allNeighbours.remove(i);
+			}
+		}
+	}
+	
 	public Repeater getRepeater() {
 		return this;
 	}
@@ -76,6 +85,20 @@ public class Repeater {
 	public void receiveData(Qubit data) {
 		this.receivedData = data;
 		System.out.println("The repeater " + this.getId() + " got the data " + data.data);
+		new SendData(this, data).run();
+	}
+	
+	@Override
+	public boolean equals(Object other){
+	    if (other == null) return false;
+	    if (other == this) return true;
+	    if (!(other instanceof Repeater))return false;
+	    Repeater other1 = (Repeater) other;
+	    if (this.getId().equals(other1.getId())) {
+	    	return true;
+	    }
+		return false;
+	    
 	}
 	
 	/* 

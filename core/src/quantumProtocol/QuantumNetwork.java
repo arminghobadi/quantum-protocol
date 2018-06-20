@@ -54,7 +54,7 @@ public class QuantumNetwork {
 			QuantumMemory qm = new QuantumMemory(r);
 			r.addNode(qm);
 		}
-		System.out.println(r);
+		//System.out.println(r);
 		repeaters.add(r);
 		
 	}
@@ -62,13 +62,14 @@ public class QuantumNetwork {
 	public static void communication() {
 		//attempt starts at Alice
 		//every repeater is connected to its neighbors
-		System.out.println("here" + source.neighbours.size());
 		for (int i = 0 ; i < repeaters.size() ; i++) {
-			System.out.println(repeaters.get(i).getId() + " " + repeaters.get(i).allNeighbours.size() + " " + repeaters.get(i).getAllNeighbours());
+			//System.out.println(repeaters.get(i).getId() + " - " + repeaters.get(i).allNeighbours.size() + " " + repeaters.get(i).getAllNeighbours());
 		}
-		System.out.println();
-		for (int i = 0 ; i < source.neighbours.size() ; i++) {
-			new SendData(source, source.allNeighbours.get(i), new Qubit(), new Event(eventType.EXTERNAL) );
+		new SendData(source, new Qubit()).run();
+		for (int i = 0 ; i < source.allNeighbours.size() ; i++) {
+			//System.out.println("sending data to " + source.allNeighbours.get(i));
+			//new SendData(source, source.allNeighbours.get(i), new Qubit(), new Event(eventType.EXTERNAL) ).run()
+			
 		}
 		
 	}
@@ -126,7 +127,7 @@ public class QuantumNetwork {
 		
 	}
 	
-	private static Repeater findRepeater(String repeaterId) {
+	public static Repeater findRepeater(String repeaterId) {
 		Optional<Repeater> value = repeaters
 	            .stream()
 	            .filter(a -> a.getId().equals(repeaterId))
@@ -159,7 +160,7 @@ public class QuantumNetwork {
 		repeaterMap.put(rsrc, rtrg);
 		repeaterMap.put(rtrg, rsrc);
 		
-		System.out.println(l);
+		//System.out.println(l);
 		lossyLinks.add(l);
 	}
 	

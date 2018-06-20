@@ -7,6 +7,7 @@ public class LossyLink {
 	private final float LOSS_ = 0;
 	public Repeater source;
 	public Repeater target;
+	public Repeater[] ends;
 	public QuantumMemory sourceNode;
 	public QuantumMemory targetNode;
 	public String id;
@@ -14,6 +15,7 @@ public class LossyLink {
 	public LossyLink(Repeater source, Repeater target, QuantumMemory sourceNode, QuantumMemory targetNode, String id) {
 		this.source = source.getRepeater();
 		this.target = target;
+		this.ends = new Repeater[2];
 		this.sourceNode = sourceNode;
 		this.targetNode = targetNode;
 		this.id = id;
@@ -34,6 +36,13 @@ public class LossyLink {
 		//random num generator if random num>  loss => success
 		Random rand = new Random();
 		return rand.nextInt() > LOSS_ ? true : false;
+	}
+	
+	public Repeater getTarget(Repeater source) {
+		if (this.target.equals(source)) {
+			return this.source;
+		} 
+		return target;
 	}
 	
 	@Override
