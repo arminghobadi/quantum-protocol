@@ -1,9 +1,11 @@
 class Link {
-	constructor(end1, end2){
-		this.end1 = end1;
+	constructor(end1, end2, sourceQM, targetQM){
+		this.end1 = end1
 		this.end1.addLink(this)
-		this.end2 = end2;
+		this.end2 = end2
 		this.end2.addLink(this)
+		this.sourceQM = sourceQM
+		this.targetQM = targetQM
 	}
   	send(message, source){
     	this.otherEnd(source).receive(message)

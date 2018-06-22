@@ -1,0 +1,32 @@
+Imagine a network as described below:
+
+r1---l1-----r2
+ \          /|
+  \        / |
+   l5     /  |
+    \    l4  |
+     \  /    |
+      \/     |
+      /\     l2
+     /  \    |
+    /    \   |
+   /      \  |
+  /        \ |
+ /          \|
+r3----l3----r4
+
+Lets emit 1 qubit from repeater r1 to r3.
+There are 4 possible paths from r1 to r3:
+
+ 1) r1 -> r2 -> r3
+ 2) r1 -> r2 -> r4 -> r3
+ 3) r1 -> r4 -> r3
+ 4) r1 -> r4 -> r2 -> r3
+
+In a real network, r1 will be emitting the data to its neighbors as its ready. The same goes for its neighbors ( r2, r4 ), Eg: When r1 emits to r2 and r4, they will transfer the data as they get ready. This way, neither r2 nor r4 will be waiting for the other repeater to trasmit the data. 
+In reality, the order of data transfer between r2 and r4 happens randomly depending on their speed of execution.
+
+If we want to mimic a network on a single computer, the technique that is used right now is multi-threading. However, it is easy to make the algorithm not thread-safe by making even a simple mistake. Additionally, it is generally harder to debug a multi-threaded algorithm rather than a single-thread.
+
+My proposal is to use a single-thread algorithm that impersonates a real network as close as possible. Lets assume that every Event that is supposed to happen is in a queue. If we randomize the order of handling each Event in that queue, mathematically speaking, its the same as a real network. The only down part is that no 2 events will happen simultaniously. Therefore the algorithm might be slower than a network, but its just as accurate.
+

@@ -1,6 +1,7 @@
 class QuantumMemory {
-	constructor(repeater) {
+	constructor(repeater, id) {
 		this.repeater = repeater
+		this.id = id
 	}
 }
 
