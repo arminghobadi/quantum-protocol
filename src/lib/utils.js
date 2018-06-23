@@ -4,13 +4,15 @@ function rand1to10(){
 
 var funqueue = []
 
-function putInQueue( func ){
-  this.funqueue.push(func)
+function putInQueue(func){
+  //funqueue.fill('true')
+  funqueue.push(func)
+  //console.log(funqueue)
 }
 
 function doNext(){
   //check for validity
-  return this.funcqueue.shift()
+  //return funcqueue.shift()
 }
 
 function doAsynchronouslyWithSomeDelay(operation){
@@ -32,4 +34,4 @@ funqueue.push(fun2);
 (funqueue.shift())();
 */
 
-module.exports = { rand1to10, doAsynchronouslyWithSomeDelay }
+module.exports = { putInQueue, rand1to10, doAsynchronouslyWithSomeDelay }

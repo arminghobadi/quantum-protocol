@@ -1,4 +1,4 @@
-const { doAsynchronouslyWithSomeDelay } = require('./utils')
+const { doAsynchronouslyWithSomeDelay, doNext, putInQueue } = require('./utils')
 const { QuantumMemory } = require('./QuantumMemory')
 
 class Repeater {
@@ -24,7 +24,7 @@ class Repeater {
 		sourceQM.send(sourceQM, targetQM)
 		console.log(`in repeater ${this.getId()} sending a qubit from ${sourceQM.getId()} to ${targetQM.getId()}`)
 	}
-	emit(message /* Object */) {
+	emit(message /* Object */, qm) {
 		const messageWithUpdatedVisitedList =
 			Object.assign(
 				{},
@@ -35,10 +35,13 @@ class Repeater {
 			.filter(link =>
 				!message.visited.includes(link.otherEnd(this)))
 			.forEach(link =>
-				link.send(messageWithUpdatedVisitedList, this)
-				/*doAsynchronouslyWithSomeDelay(() => {
+				{
+					if (message.target !== this) this.doInrepeaterTransfer(qm, link.getTargetQM(this))
+					doAsynchronouslyWithSomeDelay(() => {
 					link.send(messageWithUpdatedVisitedList, this)
-				})*/)
+				})
+			})
+
 	}
 	receive(message /* Object */, qm /* QuantumMemory */) {
 		console.log(`${this.name} reveived: ${message.content}
@@ -46,8 +49,8 @@ class Repeater {
 		this.links
 			.filter(link =>
 				!message.visited.includes(link.otherEnd(this)))
-			.forEach(link => {if (message.target !== this) this.doInrepeaterTransfer(qm, link.getTargetQM(this))})
-		if (message.target !== this) this.emit(message)
+			.forEach(link => {})
+		if (message.target !== this) this.emit(message, qm)
 	}
 }
 

@@ -10,4 +10,4 @@ const l3 = new Link(r4, r3, r4.getQM(2), r3.getQM(2), 3)
 const l4 = new Link(r2, r3, r2.getQM(3), r3.getQM(1), 4)
 const l5 = new Link(r1, r4, r1.getQM(2), r4.getQM(0), 5)
 
-r1.emit({ target: r3, visited: [], content: 'hello' })
+r1.emit({ target: r3, visited: [], content: 'hello' }, r1.getQM(1))
