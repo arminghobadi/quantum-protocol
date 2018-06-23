@@ -1,5 +1,5 @@
 class Link {
-	constructor(end1, end2, sourceQM, targetQM, id){
+	constructor(end1 /* Repeater */, end2 /* Repeater */, sourceQM /* QuantumMemory */, targetQM /* QuantumMemory */, id /* Integer */){
 		this.end1 = end1
 		this.end1.addLink(this)
 		this.end2 = end2
@@ -8,7 +8,7 @@ class Link {
 		this.targetQM = targetQM
 		this.id = id
 	}
-  send(message, source /* Repeater */){
+  send(message /* Object */, source /* Repeater */){
 		//source.getQM(sourceQM).send(message)
   	this.otherEnd(source).receive(message, this.getTargetQM(this.otherEnd(source)))
   }
