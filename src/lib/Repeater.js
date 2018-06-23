@@ -21,7 +21,7 @@ class Repeater {
 		return this.QMs[id]
 	}
 	doInrepeaterTransfer(sourceQM, targetQM){
-
+		console.log(`in repeater ${this.getId()} sending a qubit from ${sourceQM.getId()} to ${targetQM.getId()}`)
 	}
 	findLinkToSend(message){
 		return this.links
@@ -39,17 +39,23 @@ class Repeater {
 			.filter(link =>
 				!message.visited.includes(link.otherEnd(this)))
 			.forEach(link =>
-				doAsynchronouslyWithSomeDelay(() => {
+				link.send(messageWithUpdatedVisitedList, this)
+				/*doAsynchronouslyWithSomeDelay(() => {
 					link.send(messageWithUpdatedVisitedList, this)
-				}))
+				})*/)
 	}
 	receive(message, qm) {
 		console.log(`${this.name} reveived: ${message.content}
 			This repeater has already visited ` + message.visited.reduce((output, repeater) => output + repeater.name + ' ', ''))
 		var links = this.findLinkToSend(message)
-		links.forEach(link => doAsynchronouslyWithSomeDelay( () => {
+
+
+		links.forEach(link => {if (message.target !== this) this.doInrepeaterTransfer(qm, link.getTargetQM(this))}
+		/*qm.send(message, qm, link.getTargetQM(this))*/
+			/*doAsynchronouslyWithSomeDelay( () => {
 			qm.send(message, qm, link.getTargetQM(this))
-		} ))
+		} )*/)
+		if (message.target !== this) this.emit(message)
 	}
 }
 

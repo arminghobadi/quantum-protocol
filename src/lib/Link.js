@@ -8,7 +8,7 @@ class Link {
 		this.targetQM = targetQM
 		this.id = id
 	}
-  send(message, source /* Repeater*/){
+  send(message, source /* Repeater */){
 		//source.getQM(sourceQM).send(message)
   	this.otherEnd(source).receive(message, this.getTargetQM(this.otherEnd(source)))
   }

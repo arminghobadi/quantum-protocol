@@ -3,6 +3,7 @@ class QuantumMemory {
 	constructor(repeater, id) {
 		this.repeater = repeater
 		this.id = id
+		this.receivedData = false
 	}
 
 	getId(){
@@ -13,7 +14,8 @@ class QuantumMemory {
 
 	send(message, source /* QM */, target /* QM */){
 		console.log(`sending a qubit inside repeater ${this.repeater.getId()} from qubit ${source.getId()} to ${target.getId()}`)
-		target ? target.receive(message, source) : this.doNothing()
+		if (message.target !== this.repeater) target.receive(message, source)
+			else console.log('i am final target')
 	}
 
 	receive(message, source /* QM */){
