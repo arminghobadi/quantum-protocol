@@ -1,4 +1,4 @@
-const { doAsynchronouslyWithSomeDelay, doNext, putInQueue } = require('./utils')
+const { doAsynchronouslyWithSomeDelay } = require('./utils')
 const { QuantumMemory } = require('./QuantumMemory')
 
 class Repeater {
@@ -11,20 +11,25 @@ class Repeater {
 			this.QMs.push(new QuantumMemory(this, i))
 		}
 	}
+
 	getId(){
 		return this.id
 	}
+
 	addLink(link) {
 		this.links.push(link)
 	}
+
 	getQM(id /* Integer */){
 		return this.QMs[id]
 	}
+
 	doInrepeaterTransfer(sourceQM, targetQM){
 		sourceQM.send(sourceQM, targetQM)
 		console.log(`in repeater ${this.getId()} sending a qubit from ${sourceQM.getId()} to ${targetQM.getId()}`)
 	}
-	emit(message /* Object */, qm) {
+
+	emit(message /* Object */, qm /* QuantumMemory*/) {
 		const messageWithUpdatedVisitedList =
 			Object.assign(
 				{},
@@ -35,14 +40,14 @@ class Repeater {
 			.filter(link =>
 				!message.visited.includes(link.otherEnd(this)))
 			.forEach(link =>
-				{
-					if (message.target !== this) this.doInrepeaterTransfer(qm, link.getTargetQM(this))
+				{ // TODO: this.getId() !== 1 -> what the fuck!! fix this shit! its embaressing!
+					if (message.target !== this && this.getId() !== 1) this.doInrepeaterTransfer(qm, link.getTargetQM(this))
 					doAsynchronouslyWithSomeDelay(() => {
 					link.send(messageWithUpdatedVisitedList, this)
 				})
 			})
-
 	}
+
 	receive(message /* Object */, qm /* QuantumMemory */) {
 		console.log(`${this.name} reveived: ${message.content}
 			This repeater has already visited ` + message.visited.reduce((output, repeater) => output + repeater.name + ' ', ''))

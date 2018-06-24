@@ -1,22 +1,30 @@
+const P_LOSS_CHANCE_ = 1 // From 1 to 10
+const Q_LOSS_CHANCE_ = 1 // From 1 to 10
+
 function rand1to10(){
   return Math.floor(Math.random() * 10 + 1)
 }
 
-var funqueue = []
-
-function putInQueue(func){
-  //funqueue.fill('true')
-  funqueue.push(func)
-  //console.log(funqueue)
+function calculateLossP(message /* String */){
+  const rand = rand1to10()
+  if (rand < P_LOSS_CHANCE_){
+    return ''
+  }
+  const loss = Math.floor( (message.length * (10 - rand) ) / 10 )
+  return message.substring(0, loss)
 }
 
-function doNext(){
-  //check for validity
-  //return funcqueue.shift()
+function calculateLossQ(message /* String */){
+  const rand = rand1to10()
+  if (rand < Q_LOSS_CHANCE_){
+    return ''
+  }
+  const loss = Math.floor(message.length / rand)
+  return message.substring(0, loss)
 }
 
 function doAsynchronouslyWithSomeDelay(operation){
-  setTimeout(operation, rand1to10() * 500)
+  setTimeout(operation, rand1to10() * 500 /* miliseconds */)
 }
 
 /*
@@ -34,4 +42,4 @@ funqueue.push(fun2);
 (funqueue.shift())();
 */
 
-module.exports = { putInQueue, rand1to10, doAsynchronouslyWithSomeDelay }
+module.exports = { rand1to10, doAsynchronouslyWithSomeDelay, calculateLossP, calculateLossQ }

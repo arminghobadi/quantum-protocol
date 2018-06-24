@@ -1,3 +1,5 @@
+const { calculateLossP } = require('./utils')
+
 class Link {
 	constructor(end1 /* Repeater */, end2 /* Repeater */, sourceQM /* QuantumMemory */, targetQM /* QuantumMemory */, id /* Integer */){
 		this.end1 = end1
@@ -9,7 +11,8 @@ class Link {
 		this.id = id
 	}
   send(message /* Object */, source /* Repeater */){
-		//source.getQM(sourceQM).send(message)
+		const messageWithLoss = calculateLossP(message.content)
+		message.content = messageWithLoss
   	this.otherEnd(source).receive(message, this.getTargetQM(this.otherEnd(source)))
   }
 	getSourceQM(repeater){
