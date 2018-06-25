@@ -1,17 +1,24 @@
-const P_LOSS_CHANCE_ = 1 // From 1 to 10
-const Q_LOSS_CHANCE_ = 1 // From 1 to 10
+const P_LOSS_CHANCE_ = 3 // From 1 to 10
+const Q_LOSS_CHANCE_ = 3 // From 1 to 10
 
 function rand1to10(){
   return Math.floor(Math.random() * 10 + 1)
 }
 
-function calculateLossP(message /* String */){
+function calculateLossP(message /* Object */){
   const rand = rand1to10()
   if (rand < P_LOSS_CHANCE_){
+    console.log('rand came less than 3')
+    // TODO: this is where the path should die!! it just throws an error right now which is i think good enough!
+    // im not sure actually. should i do something else?!
     return ''
   }
-  const loss = Math.floor( (message.length * (10 - rand) ) / 10 )
-  return message.substring(0, loss)
+  const messageWithLoss = {
+    target: message.target,
+    visited: message.visited,
+    content: message.content.substring(0, Math.floor( (message.content.length * (rand) ) / (10) ) ) || ''
+  }
+  return messageWithLoss
 }
 
 function calculateLossQ(message /* String */){

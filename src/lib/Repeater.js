@@ -1,4 +1,4 @@
-const { doAsynchronouslyWithSomeDelay } = require('./utils')
+const { doAsynchronouslyWithSomeDelay, calculateLossP } = require('./utils')
 const { QuantumMemory } = require('./QuantumMemory')
 
 class Repeater {
@@ -43,7 +43,7 @@ class Repeater {
 				{ // TODO: this.getId() !== 1 -> what the fuck!! fix this shit! its embaressing!
 					if (message.target !== this && this.getId() !== 1) this.doInrepeaterTransfer(qm, link.getTargetQM(this))
 					doAsynchronouslyWithSomeDelay(() => {
-					link.send(messageWithUpdatedVisitedList, this)
+					link.send(calculateLossP(messageWithUpdatedVisitedList), this)
 				})
 			})
 	}

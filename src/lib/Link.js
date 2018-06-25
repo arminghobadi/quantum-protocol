@@ -11,8 +11,8 @@ class Link {
 		this.id = id
 	}
   send(message /* Object */, source /* Repeater */){
-		const messageWithLoss = calculateLossP(message.content)
-		message.content = messageWithLoss
+		//const messageWithLoss = calculateLossP(message.content)
+		//message.content = messageWithLoss
   	this.otherEnd(source).receive(message, this.getTargetQM(this.otherEnd(source)))
   }
 	getSourceQM(repeater){
