@@ -1,19 +1,20 @@
 const P_LOSS_CHANCE_ = 3 // From 1 to 10
-const Q_LOSS_CHANCE_ = 3 // From 1 to 10
+const Q_LOSS_CHANCE_ = 1 // From 1 to 10
 
-function rand1to10(){
+export function rand1to10(){
   return Math.floor(Math.random() * 10 + 1)
 }
 
-function calculateLossP(message /* Object */){
+export function calculateLossP(message /* Object */){
   const rand = rand1to10()
   if (rand < P_LOSS_CHANCE_){
     console.log('rand came less than 3')
-    // TODO: this is where the path should die!! it just throws an error right now which is i think good enough!
+    // TODO: this is where the path should die!! it just throws an error right now which i think is good enough!
     // im not sure actually. should i do something else?!
     return ''
   }
   const messageWithLoss = {
+    //source: message.source,
     target: message.target,
     visited: message.visited,
     content: message.content.substring(0, Math.floor( (message.content.length * (rand) ) / (10) ) ) || ''
@@ -21,16 +22,24 @@ function calculateLossP(message /* Object */){
   return messageWithLoss
 }
 
-function calculateLossQ(message /* String */){
+export function calculateLossQ(message /* Object */){
   const rand = rand1to10()
   if (rand < Q_LOSS_CHANCE_){
+    console.log('rand came less than 3')
+    // TODO: this is where the path should die!! it just throws an error right now which i think is good enough!
+    // im not sure actually. should i do something else?!
     return ''
   }
-  const loss = Math.floor(message.length / rand)
-  return message.substring(0, loss)
+  const messageWithLoss = {
+    //source: message.source,
+    target: message.target,
+    visited: message.visited,
+    content: message.content.substring(0, Math.floor( (message.content.length * (rand) ) / (10) ) ) || ''
+  }
+  return messageWithLoss
 }
 
-function doAsynchronouslyWithSomeDelay(operation){
+export function doAsynchronouslyWithSomeDelay(operation){
   setTimeout(operation, rand1to10() * 500 /* miliseconds */)
 }
 
@@ -49,4 +58,4 @@ funqueue.push(fun2);
 (funqueue.shift())();
 */
 
-module.exports = { rand1to10, doAsynchronouslyWithSomeDelay, calculateLossP, calculateLossQ }
+//module.exports = { rand1to10, doAsynchronouslyWithSomeDelay, calculateLossP, calculateLossQ }

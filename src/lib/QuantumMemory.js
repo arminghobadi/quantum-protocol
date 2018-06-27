@@ -1,4 +1,5 @@
-class QuantumMemory {
+import { calculateLossQ, doAsynchronouslyWithSomeDelay } from './utils'
+export class QuantumMemory {
 
 	constructor(repeater /* Repeater */, id /* Integer */) {
 		this.repeater = repeater
@@ -9,14 +10,16 @@ class QuantumMemory {
 		return this.id
 	}
 
-	send(source /* QuantumMemory */, target /* QuantumMemory */){
-		target.receive(source, target)
+	sendToReceivingQM(target /* QuantumMemory */, message /* Object */, linkToSendData /* Link */){
+		console.log(`message has content ${message.content}`)
+		target.receiveDataFromQM(calculateLossQ(message), linkToSendData)
 	}
 
-	receive(source /* QuantumMemory */, target /* QuantumMemory */){
-		console.log("got it")
+	receiveDataFromQM(message /* Object */, linkToSendData /* Link */){
+		console.log(`message received from a qm with content ${message.content}`)
+		doAsynchronouslyWithSomeDelay(() => {
+			linkToSendData.send(message, this.repeater)
+		})
 	}
 
 }
-
-module.exports = { QuantumMemory }

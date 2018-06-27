@@ -1,5 +1,5 @@
 
-sendToQM(){
+send(){
 
 }
 

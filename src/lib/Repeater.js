@@ -1,7 +1,7 @@
-const { doAsynchronouslyWithSomeDelay, calculateLossP } = require('./utils')
-const { QuantumMemory } = require('./QuantumMemory')
+import { doAsynchronouslyWithSomeDelay, calculateLossP } from './utils'
+import { QuantumMemory } from './QuantumMemory'
 
-class Repeater {
+export class Repeater {
 	constructor(name /* String */, numberOfQMs /* Integer */, id /* Integer */) {
 		this.id = id
 		this.name = name
@@ -24,8 +24,8 @@ class Repeater {
 		return this.QMs[id]
 	}
 
-	doInrepeaterTransfer(sourceQM, targetQM){
-		sourceQM.send(sourceQM, targetQM)
+	doInrepeaterTransfer(sourceQM /* QuantumMemory */, targetQM /* QuantumMemory */, message /* Object */, linkToSendData /* Link */){
+		sourceQM.sendToReceivingQM(targetQM, message, linkToSendData)
 		console.log(`in repeater ${this.getId()} sending a qubit from ${sourceQM.getId()} to ${targetQM.getId()}`)
 	}
 
@@ -41,9 +41,10 @@ class Repeater {
 				!message.visited.includes(link.otherEnd(this)))
 			.forEach(link =>
 				{ // TODO: this.getId() !== 1 -> what the fuck!! fix this shit! its embaressing!
-					if (message.target !== this && this.getId() !== 1) this.doInrepeaterTransfer(qm, link.getTargetQM(this))
-					doAsynchronouslyWithSomeDelay(() => {
-					link.send(calculateLossP(messageWithUpdatedVisitedList), this)
+					if (message.target !== this && this.getId() !== 1) this.doInrepeaterTransfer(qm, link.getTargetQM(this), messageWithUpdatedVisitedList, link)
+					if (message.source === this) doAsynchronouslyWithSomeDelay(() => {
+						message.source = ''
+						link.send(calculateLossP(messageWithUpdatedVisitedList), this)
 				})
 			})
 	}
@@ -51,12 +52,8 @@ class Repeater {
 	receive(message /* Object */, qm /* QuantumMemory */) {
 		console.log(`${this.name} reveived: ${message.content}
 			This repeater has already visited ` + message.visited.reduce((output, repeater) => output + repeater.name + ' ', ''))
-		this.links
-			.filter(link =>
-				!message.visited.includes(link.otherEnd(this)))
-			.forEach(link => {})
 		if (message.target !== this) this.emit(message, qm)
 	}
 }
 
-module.exports = { Repeater }
+//module.exports = { Repeater }

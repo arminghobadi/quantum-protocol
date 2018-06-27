@@ -1,6 +1,6 @@
-const { calculateLossP } = require('./utils')
+import { calculateLossP } from './utils'
 
-class Link {
+export class Link {
 	constructor(end1 /* Repeater */, end2 /* Repeater */, sourceQM /* QuantumMemory */, targetQM /* QuantumMemory */, id /* Integer */){
 		this.end1 = end1
 		this.end1.addLink(this)
@@ -31,5 +31,3 @@ class Link {
 		else throw new Error('???')
 	}
 }
-
-module.exports = { Link }
