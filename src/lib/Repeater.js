@@ -1,7 +1,7 @@
-import { doAsynchronouslyWithSomeDelay, calculateLossP } from './utils'
-import { QuantumMemory } from './QuantumMemory'
+const { doAsynchronouslyWithSomeDelay, calculateLossP, logData, logStat } = require('./utils')
+const { QuantumMemory } = require('./QuantumMemory')
 
-export class Repeater {
+class Repeater {
 	constructor(name /* String */, numberOfQMs /* Integer */, id /* Integer */) {
 		this.id = id
 		this.name = name
@@ -25,11 +25,13 @@ export class Repeater {
 	}
 
 	doInrepeaterTransfer(sourceQM /* QuantumMemory */, targetQM /* QuantumMemory */, message /* Object */, linkToSendData /* Link */){
+		logData(`Sending message '${message.content}' inside repeater ${this.getId()} from QM ${sourceQM.getId() + 1} to QM ${targetQM.getId() + 1}`)
 		sourceQM.sendToReceivingQM(targetQM, message, linkToSendData)
 		console.log(`in repeater ${this.getId()} sending a qubit from ${sourceQM.getId()} to ${targetQM.getId()}`)
 	}
 
 	emit(message /* Object */, qm /* QuantumMemory*/) {
+
 		const messageWithUpdatedVisitedList =
 			Object.assign(
 				{},
@@ -50,10 +52,17 @@ export class Repeater {
 	}
 
 	receive(message /* Object */, qm /* QuantumMemory */) {
-		console.log(`${this.name} reveived: ${message.content}
+		logData(`${this.name} received: '${message.content}'
 			This repeater has already visited ` + message.visited.reduce((output, repeater) => output + repeater.name + ' ', ''))
-		if (message.target !== this) this.emit(message, qm)
+		console.log(`${this.name} reveived: '${message.content}'
+			This repeater has already visited ` + message.visited.reduce((output, repeater) => output + repeater.name + ' ', ''))
+		if (message.target === this){
+			logStat(`Path: ${message.visited.reduce((output, repeater) => output + repeater.name + ' ', '')}. Content received: '${message.content}'`)
+		}
+		else {
+			this.emit(message, qm)
+		}
 	}
 }
 
-//module.exports = { Repeater }
+module.exports = { Repeater }

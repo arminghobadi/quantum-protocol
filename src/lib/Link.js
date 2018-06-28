@@ -1,6 +1,4 @@
-import { calculateLossP } from './utils'
-
-export class Link {
+class Link {
 	constructor(end1 /* Repeater */, end2 /* Repeater */, sourceQM /* QuantumMemory */, targetQM /* QuantumMemory */, id /* Integer */){
 		this.end1 = end1
 		this.end1.addLink(this)
@@ -11,10 +9,11 @@ export class Link {
 		this.id = id
 	}
   send(message /* Object */, source /* Repeater */){
-		//const messageWithLoss = calculateLossP(message.content)
-		//message.content = messageWithLoss
   	this.otherEnd(source).receive(message, this.getTargetQM(this.otherEnd(source)))
   }
+	getId(){
+		return this.id
+	}
 	getSourceQM(repeater){
 		if (repeater === this.end1) return this.targetQM
 		else if (repeater === this.end2) return this.sourceQM
@@ -31,3 +30,5 @@ export class Link {
 		else throw new Error('???')
 	}
 }
+
+module.exports = { Link }

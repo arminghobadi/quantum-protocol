@@ -1,0 +1,80 @@
+Repeater2 received: 'empty'
+			This repeater has already visited Repeater1 
+Sending message 'empty' inside repeater 2 from QM 1 to QM 3
+A message with content empty was received and is being sent to 2 through link 2
+message received. Content: emp
+Sending message 'empty' inside repeater 2 from QM 1 to QM 4
+A message with content empty was received and is being sent to 3 through link 4
+message received. Content: emp
+Repeater4 received: 'hello-world!'
+			This repeater has already visited Repeater1 
+Sending message 'hello-world!' inside repeater 4 from QM 1 to QM 2
+message received. Content: hello-
+A message with content hello-world! was received and is being sent to 1 through link 2
+Sending message 'hello-world!' inside repeater 4 from QM 1 to QM 3
+A message with content hello-world! was received and is being sent to 2 through link 3
+message received. Content: h
+Repeater3 received: 'h'
+			This repeater has already visited Repeater1 Repeater4 
+Repeater4 received: 'emp'
+			This repeater has already visited Repeater1 Repeater2 
+Sending message 'emp' inside repeater 4 from QM 2 to QM 3
+A message with content emp was received and is being sent to 2 through link 3
+message received. Content: emp
+Repeater2 received: 'hello-'
+			This repeater has already visited Repeater1 Repeater4 
+Sending message 'hello-' inside repeater 2 from QM 3 to QM 4
+A message with content hello- was received and is being sent to 3 through link 4
+message received. Content: he
+Repeater3 received: 'emp'
+			This repeater has already visited Repeater1 Repeater2 
+Sending message 'emp' inside repeater 3 from QM 2 to QM 3
+A message with content emp was received and is being sent to 2 through link 3
+message received. Content: 
+Repeater3 received: 'emp'
+			This repeater has already visited Repeater1 Repeater2 Repeater4 
+Repeater4 received: ''
+			This repeater has already visited Repeater1 Repeater2 Repeater3 
+Repeater3 received: 'he'
+			This repeater has already visited Repeater1 Repeater4 Repeater2 
+----
+Repeater4 received: 'hello-'
+			This repeater has already visited Repeater1 
+Sending message 'hello-' inside repeater 4 from QM 1 to QM 2
+A message with content hello- was received and is being sent to 1 through link 2
+message received. Content: hell
+Sending message 'hello-' inside repeater 4 from QM 1 to QM 3
+A message with content hello- was received and is being sent to 2 through link 3
+message received. Content: he
+Repeater3 received: 'he'
+			This repeater has already visited Repeater1 Repeater4 
+Repeater2 received: 'empty'
+			This repeater has already visited Repeater1 
+Sending message 'empty' inside repeater 2 from QM 1 to QM 3
+A message with content empty was received and is being sent to 2 through link 2
+message received. Content: 
+Sending message 'empty' inside repeater 2 from QM 1 to QM 4
+A message with content empty was received and is being sent to 3 through link 4
+message received. Content: emp
+Repeater3 received: 'emp'
+			This repeater has already visited Repeater1 Repeater2 
+Sending message 'emp' inside repeater 3 from QM 2 to QM 3
+A message with content emp was received and is being sent to 2 through link 3
+message received. Content: e
+Repeater4 received: 'e'
+			This repeater has already visited Repeater1 Repeater2 Repeater3 
+Repeater2 received: 'hell'
+			This repeater has already visited Repeater1 Repeater4 
+Sending message 'hell' inside repeater 2 from QM 3 to QM 4
+A message with content hell was received and is being sent to 3 through link 4
+message received. Content: h
+Repeater4 received: ''
+			This repeater has already visited Repeater1 Repeater2 
+Sending message '' inside repeater 4 from QM 2 to QM 3
+A message with content  was received and is being sent to 2 through link 3
+message received. Content: 
+Repeater3 received: 'h'
+			This repeater has already visited Repeater1 Repeater4 Repeater2 
+Repeater3 received: ''
+			This repeater has already visited Repeater1 Repeater2 Repeater4 
+----
