@@ -1,7 +1,9 @@
-const { doAsynchronouslyWithSomeDelay, calculateLossP, logData, logStat } = require('./utils')
+const { Caro, calculateLossP, logData, logStat } = require('./utils')
 const { QuantumMemory } = require('./QuantumMemory')
 
 class Repeater {
+	//getQM() and list of QMs are never used! should they be there??
+
 	constructor(name /* String */, numberOfQMs /* Integer */, id /* Integer */) {
 		this.id = id
 		this.name = name
@@ -32,6 +34,7 @@ class Repeater {
 
 	emit(message /* Object */, qm /* QuantumMemory*/) {
 
+		//what does this do exactly?
 		const messageWithUpdatedVisitedList =
 			Object.assign(
 				{},
@@ -44,7 +47,7 @@ class Repeater {
 			.forEach(link =>
 				{ // TODO: this.getId() !== 1 -> what the fuck!! fix this shit! its embaressing!
 					if (message.target !== this && this.getId() !== 1) this.doInrepeaterTransfer(qm, link.getTargetQM(this), messageWithUpdatedVisitedList, link)
-					if (message.source === this) doAsynchronouslyWithSomeDelay(() => {
+					if (message.source === this) Caro(() => {
 						message.source = ''
 						link.send(calculateLossP(messageWithUpdatedVisitedList), this)
 				})

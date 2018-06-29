@@ -1,4 +1,4 @@
-const { calculateLossQ, doAsynchronouslyWithSomeDelay, logData } = require('./utils')
+const { calculateLossQ, Caro, logData } = require('./utils')
 const fs = require('fs')
 class QuantumMemory {
 
@@ -20,7 +20,7 @@ class QuantumMemory {
 	receiveDataFromQM(message /* Object */, linkToSendData /* Link */){
 		logData(`message received. Content: '${message.content}'`)
 		console.log(`message received from a qm with content '${message.content}'`)
-		doAsynchronouslyWithSomeDelay(() => {
+		Caro(() => {
 			linkToSendData.send(message, this.repeater)
 		})
 	}

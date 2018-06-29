@@ -54,8 +54,8 @@ function logStat(data){
   })
 }
 
-function doAsynchronouslyWithSomeDelay(operation){
+function Caro(operation){
   setTimeout(operation, rand1to10() * 500 /* miliseconds */)
 }
 
-module.exports = { doAsynchronouslyWithSomeDelay, logData, logStat, calculateLossP, calculateLossQ, rand1to10 }
+module.exports = { Caro, logData, logStat, calculateLossP, calculateLossQ, rand1to10 }
