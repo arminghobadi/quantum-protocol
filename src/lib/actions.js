@@ -1,13 +1,13 @@
 
-send(){
+function send(){
 
 }
 
-receive(){
+function receive(){
 
 }
 
-emit(){
+function emit(){
 
 }
 
@@ -16,9 +16,9 @@ emit(){
  * it will return a random number that is between the start and end with the probability given
  * @returns Integer
  */
-getRandomNumberWithPossibility(start /* Integer between 1 to 10 */, end /* Integer between 1 to 10 */, probability /* Integer between 1 to 10 */){
+function getRandomNumberWithPossibility(start /* Integer between 1 to 10 */, end /* Integer between 1 to 10 */, probability /* Integer between 1 to 10 */){
   var num = 0
-  for (int i = 0 ; i < probability ; i++ ){
+  for (var i = 0 ; i < probability ; i++ ){
     var temp = Math.floor(Math.random() * 10 + 1)
     if (num > start && num < end){
       return num
