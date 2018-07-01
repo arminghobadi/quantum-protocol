@@ -12,9 +12,14 @@ class QuantumMemory {
 	}
 
 	sendToReceivingQM(target /* QuantumMemory */, message /* Object */, linkToSendData /* Link */){
-		logData(`A message with content '${message.content}' was received and is being sent to ${target.getId()} through link ${linkToSendData.getId()}`)
-		console.log(`message has content '${message.content}'`)
-		target.receiveDataFromQM(calculateLossQ(message), linkToSendData)
+		if (message === ''){
+
+		} else
+		{
+			logData(`A message with content '${message.content}' was received and is being sent to ${target.getId()} through link ${linkToSendData.getId()}`)
+			console.log(`message has content '${message.content}'`)
+			target.receiveDataFromQM(calculateLossQ(message), linkToSendData)
+		}
 	}
 
 	receiveDataFromQM(message /* Object */, linkToSendData /* Link */){

@@ -13,7 +13,7 @@ function calculateLossP(message /* Object */){
     // TODO: this is where the path should die!! it just throws an error right now which i think is good enough!
     // im not sure actually. should i do something else?!
     logStat(`Path died at ${message.visited.reduce((output, repeater) => output + repeater.name + ' ', '')}`)
-    return { targe: message.target, visited: message.visited, content: 'empty' }
+    return ''
   }
   const messageWithLoss = {
     //source: message.source,
@@ -31,7 +31,7 @@ function calculateLossQ(message /* Object */){
     // TODO: this is where the path should die!! it just throws an error right now which i think is good enough!
     // im not sure actually. should i do something else?!
     logStat(`Path died at ${message.visited.reduce((output, repeater) => output + repeater.name + ' ', '')}`)
-    return { targe: message.target, visited: message.visited, content: 'empty' }
+    return ''
   }
   const messageWithLoss = {
     //source: message.source,

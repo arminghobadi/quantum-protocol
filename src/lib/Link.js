@@ -9,7 +9,11 @@ class Link {
 		this.id = id
 	}
   send(message /* Object */, source /* Repeater */){
-  	this.otherEnd(source).receive(message, this.getTargetQM(this.otherEnd(source)))
+		if (message === ''){
+
+		}
+		else 
+  		this.otherEnd(source).receive(message, this.getTargetQM(this.otherEnd(source)))
   }
 	getId(){
 		return this.id
