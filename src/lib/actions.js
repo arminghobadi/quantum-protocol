@@ -16,7 +16,7 @@ function emit(){
  * it will return a random number that is between the start and end with the probability given
  * @returns Integer
  */
-function getRandomNumberWithPossibility(start /* Integer between 1 to 10 */, end /* Integer between 1 to 10 */, probability /* Integer between 1 to 10 */){
+function getRandomNumberWithProbability(start /* Integer between 1 to 10 */, end /* Integer between 1 to 10 */, probability /* Integer between 1 to 10 */){
   var num = 0
   for (var i = 0 ; i < probability ; i++ ){
     var temp = Math.floor(Math.random() * 10 + 1)
@@ -33,4 +33,4 @@ function getRandomNumberWithPossibility(start /* Integer between 1 to 10 */, end
   return num
 }
 
-module.exports = { getRandomNumberWithPossibility }
+module.exports = { getRandomNumberWithProbability }
