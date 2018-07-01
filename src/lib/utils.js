@@ -1,6 +1,7 @@
 const P_LOSS_CHANCE_ = 3 // From 1 to 10
 const Q_LOSS_CHANCE_ = 3 // From 1 to 10
 const fs = require('fs')
+const getRandomNumberWithPossibility = require('./actions')
 
 function rand1to10(){
   return Math.floor(Math.random() * 10 + 1)
