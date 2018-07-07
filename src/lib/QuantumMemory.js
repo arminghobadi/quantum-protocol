@@ -13,7 +13,7 @@ class QuantumMemory {
 	}
 
 	sendToReceivingQM(target /* QuantumMemory */, message /* Object */, linkToSendData /* Link */){
-		logData('some')
+		//logData('some')
 		if (message.type === 'String'){
 			if (message === ''){
 
@@ -24,7 +24,7 @@ class QuantumMemory {
 			}
 		}
 		if (message.type === 'Bit'){
-			console.log(calculateLossQ(message))
+			//console.log(calculateLossQ(message))
 			if (QSuccessRate()){
 				logData(`A message with content '${message.content}' was received and is being sent to ${target.getId()} through link ${linkToSendData.getId()}`)
 				console.log(`message has content '${message.content}'`)

@@ -4,9 +4,9 @@ const P_SUCCESS_RATE_ = 0 // 0-> all success ; 10 -> all fail
 const Q_SUCCESS_RATE_ = 0
 const fs = require('fs')
 const getRandomNumberWithProbability = require('./actions')
-const { sendToReceivingQM } = require('./QuantumMemory')
+//const { sendToReceivingQM } = require('./QuantumMemory')
 const { repeater } = require('./Repeater')
-const { QuantumMemory} = require('./QuantumMemory')
+//const { QuantumMemory} = require('./QuantumMemory')
 
 var eventQueue = []
 
