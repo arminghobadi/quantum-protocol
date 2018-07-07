@@ -1,4 +1,4 @@
-const { calculateLossQ, Caro, logData } = require('./utils')
+const { calculateLossQ, Caro, logData, QSuccessRate, deadPath } = require('./utils')
 const fs = require('fs')
 class QuantumMemory {
 
@@ -12,14 +12,26 @@ class QuantumMemory {
 	}
 
 	sendToReceivingQM(target /* QuantumMemory */, message /* Object */, linkToSendData /* Link */){
-		if (message === ''){
+		if (message.type === 'String'){
+			if (message === ''){
 
-		} else
-		{
-			logData(`A message with content '${message.content}' was received and is being sent to ${target.getId()} through link ${linkToSendData.getId()}`)
-			console.log(`message has content '${message.content}'`)
-			target.receiveDataFromQM(calculateLossQ(message), linkToSendData)
+			} else {
+				logData(`A message with content '${message.content}' was received and is being sent to ${target.getId()} through link ${linkToSendData.getId()}`)
+				console.log(`message has content '${message.content}'`)
+				target.receiveDataFromQM(calculateLossQ(message), linkToSendData)
+			}
 		}
+		if (message.type === 'Bit'){
+			if (QSuccessRate()){
+				logData(`A message with content '${message.content}' was received and is being sent to ${target.getId()} through link ${linkToSendData.getId()}`)
+				console.log(`message has content '${message.content}'`)
+				target.receiveDataFromQM(message, linkToSendData)
+			}
+			else {
+				deadPath(message)
+			}
+		}
+
 	}
 
 	receiveDataFromQM(message /* Object */, linkToSendData /* Link */){

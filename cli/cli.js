@@ -18,7 +18,7 @@ function readFile(){
 }
 
 function lineByLineFile(lines){
-
+  
 }
 
 function handleRounds(round){

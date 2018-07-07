@@ -1,4 +1,4 @@
-const { Caro, calculateLossP, logData, logStat } = require('./utils')
+const { Caro, calculateLossP, logData, logStat, deadPath, PSuccessRate, QSuccessRate } = require('./utils')
 const { QuantumMemory } = require('./QuantumMemory')
 
 class Repeater {
@@ -32,7 +32,35 @@ class Repeater {
 		console.log(`in repeater ${this.getId()} sending a qubit from ${sourceQM.getId()} to ${targetQM.getId()}`)
 	}
 
-	emit(message /* Object */, qm /* QuantumMemory*/) {
+
+
+	attemptEntanglementForOneBit(message /* Object */, qm /* QuantumMemory */){
+		const messageWithUpdatedVisitedList =
+			Object.assign(
+				{},
+				message,
+				{ visited: message.visited.concat([this]) }
+			)
+		this.links
+			.filter(link =>
+				!message.visited.includes(link.otherEnd(this)))
+			.forEach(link =>
+				{ // TODO: this.getId() !== 1 -> what the fuck!! fix this shit! its embaressing!
+					if (message.target !== this && this.getId() !== 1) this.doInrepeaterTransfer(qm, link.getTargetQM(this), messageWithUpdatedVisitedList, link)
+					if (message.source === this) Caro(() => {
+						message.source = ''
+						if (PSuccessRate()){
+							link.send(message, this)
+						}
+						else {
+							deadPath(message)
+						}
+
+				})
+			})
+	}
+
+	attemptEntanglement(message /* Object */, qm /* QuantumMemory */) {
 
 		//what does this do exactly?
 		const messageWithUpdatedVisitedList =
@@ -62,8 +90,11 @@ class Repeater {
 		if (message.target === this){
 			logStat(`Path: ${message.visited.reduce((output, repeater) => output + repeater.name + ' ', '')}. Content received: '${message.content}'`)
 		}
+		else if (message.type === 'Bit'){
+			this.attemptEntanglementForOneBit(message, qm)
+		}
 		else {
-			this.emit(message, qm)
+			this.attemptEntanglement(message, qm)
 		}
 	}
 }
