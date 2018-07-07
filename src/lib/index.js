@@ -2,5 +2,6 @@ const { Repeater } = require('./Repeater')
 const { Link } = require('./Link')
 const { QuantumMemory } = require('./QuantumMemory')
 const { getRandomNumberWithProbability } = require('./actions')
+const { Event } = require('./Event')
 
-module.exports = { Repeater, Link, QuantumMemory, getRandomNumberWithProbability }
+module.exports = { Repeater, Link, QuantumMemory, getRandomNumberWithProbability, Event }

@@ -1,9 +1,11 @@
 const P_LOSS_CHANCE_ = 3 // From 1 to 10
 const Q_LOSS_CHANCE_ = 3 // From 1 to 10
-const P_SUCCESS_RATE_ = 5
-const Q_SUCCESS_RATE_ = 5
+const P_SUCCESS_RATE_ = 0 // 0-> all success ; 10 -> all fail
+const Q_SUCCESS_RATE_ = 0
 const fs = require('fs')
 const getRandomNumberWithProbability = require('./actions')
+
+var eventQueue = []
 
 function rand1to10(){
   return Math.floor(Math.random() * 10 + 1)
@@ -55,6 +57,16 @@ function calculateLossQ(message /* Object */){
   return messageWithLoss
 }
 
+function pushEvent(event /* Event */){
+  eventQueue.push(event)
+  console.log(`------- type: ${event.getEventType()} source: ${event.getEvent().source.getId()}, target: ${event.getEvent().target.getId()}`)
+  logData(`## type: ${event.getEventType()} source: ${event.getEvent().source.getId()}, target: ${event.getEvent().target.getId()}`)
+}
+
+function handleEvent(){
+
+}
+
 //THIS.NAME IS UNDEFINED!!!!
 function deadPath(message){
   logData(`${this.name} received: '${message.content}'
@@ -79,4 +91,4 @@ function Caro(operation){
   setTimeout(operation, rand1to10() * 500 /* miliseconds */)
 }
 
-module.exports = { Caro, logData, logStat, calculateLossP, calculateLossQ, rand1to10, PSuccessRate, QSuccessRate, deadPath }
+module.exports = { Caro, logData, logStat, calculateLossP, calculateLossQ, rand1to10, PSuccessRate, QSuccessRate, deadPath, pushEvent, handleEvent }
