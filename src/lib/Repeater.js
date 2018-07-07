@@ -28,6 +28,7 @@ class Repeater {
 	}
 
 	doInrepeaterTransfer(sourceQM /* QuantumMemory */, targetQM /* QuantumMemory */, message /* Object */, linkToSendData /* Link */){
+		console.log(`doInrepeaterTransfer`)
 		pushEvent(new Event('INTERNAL', { source: sourceQM, target: targetQM, link: linkToSendData }, generateId(), message ))
 		logData(`Sending message '${message.content}' inside repeater ${this.getId()} from QM ${sourceQM.getId() + 1} to QM ${targetQM.getId() + 1}`)
 		//sourceQM.sendToReceivingQM(targetQM, message, linkToSendData)
@@ -35,6 +36,7 @@ class Repeater {
 	}
 
 	attemptEntanglementForOneBit(message /* Object */, qm /* QuantumMemory */){
+		//console.log(`attemptEntanglementForOneBit`)
 		const messageWithUpdatedVisitedList =
 			Object.assign(
 				{},
@@ -46,11 +48,13 @@ class Repeater {
 				!message.visited.includes(link.otherEnd(this)))
 			.forEach(link =>
 				{ // TODO: this.getId() !== 1 -> what the fuck!! fix this shit! its embaressing!
-					if (message.target !== this && this.getId() !== 1) this.doInrepeaterTransfer(qm, link.getTargetQM(this), messageWithUpdatedVisitedList, link)
+					//console.log(`${message.target.getId()}!==${this.getId()}  ${this.getId()}!==1`)
+					if (message.target !== this && message.source !== this) this.doInrepeaterTransfer(qm, link.getTargetQM(this), messageWithUpdatedVisitedList, link)
 					if (message.source === this) {
 						//message.source = ''
 						message.visited = message.visited.concat([this])
 						if (PSuccessRate()){
+							console.log(message.content)
 							pushEvent(new Event('EXTERNAL', { source: this, target: link.otherEnd(this), link: link }, generateId(), message ))
 							//link.send(message, this)
 						}

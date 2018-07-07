@@ -7,12 +7,12 @@ class Event{
 
   constructor(
     eventType /* String: INTERNAL, EXTERNAL*/,
-    event /* Object: the actual event to be handeled*/,
+    action /* Object: the actual event to be handeled*/,
     id /* String */,
     message /* Object */
   ){
     this.eventType = eventType
-    this.event = event
+    this.action = action
     this.id = id
     this.message = message
   }
@@ -21,8 +21,8 @@ class Event{
     return this.eventType
   }
 
-  getEvent(){
-    return this.event
+  getAction(){
+    return this.action
   }
 
   getId(){

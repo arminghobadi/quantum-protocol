@@ -4,6 +4,9 @@ const P_SUCCESS_RATE_ = 0 // 0-> all success ; 10 -> all fail
 const Q_SUCCESS_RATE_ = 0
 const fs = require('fs')
 const getRandomNumberWithProbability = require('./actions')
+const { sendToReceivingQM } = require('./QuantumMemory')
+const { repeater } = require('./Repeater')
+const { QuantumMemory} = require('./QuantumMemory')
 
 var eventQueue = []
 
@@ -63,19 +66,49 @@ function calculateLossQ(message /* Object */){
 
 function pushEvent(event /* Event */){
   eventQueue.push(event)
-  console.log(`------- type: ${event.getEventType()} source: ${event.getEvent().source.getId()}, target: ${event.getEvent().target.getId()}`)
-  logData(`## type: ${event.getEventType()} source: ${event.getEvent().source.getId()}, target: ${event.getEvent().target.getId()}`)
+  console.log(`------- type: ${event.getEventType()} source: ${event.getAction().source.getId()}, target: ${event.getAction().target.getId()}`)
+  logData(`## type: ${event.getEventType()} source: ${event.getAction().source.getId()}, target: ${event.getAction().target.getId()}`)
 
 }
 
 function cycle(){
-  setTimeout(() => handleEvent(), 2000 /* miliseconds */)
+  setTimeout(() => handleEvent(), 1000 /* miliseconds */)
+}
+
+function handleInternal(event){
+  event.getAction().source.sendToReceivingQM(event.getAction().target, event.getMessage(), event.getAction().link)
+}
+
+function handleExternal(event){
+  //console.log(event.getEvent().message)
+  message = event.getMessage()
+  message.source = ''
+  event.getAction().source.attemptEntanglementForOneBit(message, event.getAction().link.getSourceQM(event.getAction().source))
 }
 
 function handleEvent(){
-  for ( var i = 0 ; i < eventQueue.length ; i++){
-    console.log(eventQueue[i].getEventType())
+  var tempQueue = eventQueue
+  console.log(`handleEvent`)
+  for ( var i = 0 ; i < tempQueue.length ; i++){
+    console.log(tempQueue[i].getEventType())
   }
+  eventQueue = []
+  for (var i = 0 ; i < tempQueue.length ; i++){
+    const event = tempQueue.pop()
+
+    //console.log(event.getMessage())
+    if (event.getEventType() === 'EXTERNAL'){
+      console.log(`ext`)
+      handleExternal(event)
+    }
+    if (event.getEventType() === 'INTERNAL'){
+      console.log(`int`)
+      handleInternal(event)
+    }
+  }
+
+
+  cycle()
   //console.log(event)
 }
 
