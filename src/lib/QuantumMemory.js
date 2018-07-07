@@ -1,4 +1,5 @@
-const { calculateLossQ, Caro, logData, QSuccessRate, deadPath } = require('./utils')
+const { calculateLossQ, Caro, logData, QSuccessRate, deadPath, pushEvent, generateId } = require('./utils')
+const { Event } = require('./Event')
 const fs = require('fs')
 class QuantumMemory {
 
@@ -37,8 +38,12 @@ class QuantumMemory {
 	receiveDataFromQM(message /* Object */, linkToSendData /* Link */){
 		logData(`message received. Content: '${message.content}'`)
 		console.log(`message received from a qm with content '${message.content}'`)
+		//console.log(`++++++++++++${linkToSendData.otherEnd}`)
+		pushEvent(new Event('EXTERNAL', { source: this.repeater, target: linkToSendData.otherEnd(this.repeater), link: linkToSendData }, generateId(), message ))
+
 		Caro(() => {
-			linkToSendData.send(message, this.repeater)
+
+			//linkToSendData.send(message, this.repeater)
 		})
 	}
 

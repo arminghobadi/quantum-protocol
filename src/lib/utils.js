@@ -7,6 +7,10 @@ const getRandomNumberWithProbability = require('./actions')
 
 var eventQueue = []
 
+function generateId() {
+  return '_' + Math.random().toString(36).substr(2, 9);
+}
+
 function rand1to10(){
   return Math.floor(Math.random() * 10 + 1)
 }
@@ -61,10 +65,18 @@ function pushEvent(event /* Event */){
   eventQueue.push(event)
   console.log(`------- type: ${event.getEventType()} source: ${event.getEvent().source.getId()}, target: ${event.getEvent().target.getId()}`)
   logData(`## type: ${event.getEventType()} source: ${event.getEvent().source.getId()}, target: ${event.getEvent().target.getId()}`)
+
+}
+
+function cycle(){
+  setTimeout(() => handleEvent(), 2000 /* miliseconds */)
 }
 
 function handleEvent(){
-
+  for ( var i = 0 ; i < eventQueue.length ; i++){
+    console.log(eventQueue[i].getEventType())
+  }
+  //console.log(event)
 }
 
 //THIS.NAME IS UNDEFINED!!!!
@@ -91,4 +103,4 @@ function Caro(operation){
   setTimeout(operation, rand1to10() * 500 /* miliseconds */)
 }
 
-module.exports = { Caro, logData, logStat, calculateLossP, calculateLossQ, rand1to10, PSuccessRate, QSuccessRate, deadPath, pushEvent, handleEvent }
+module.exports = { cycle, generateId, Caro, logData, logStat, calculateLossP, calculateLossQ, rand1to10, PSuccessRate, QSuccessRate, deadPath, pushEvent, handleEvent }

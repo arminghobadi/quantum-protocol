@@ -5,24 +5,33 @@ class Event{
   *   EXTERNAL -> Repeater to Repeater
   */
 
-  constructor(eventType, priority, event){
+  constructor(
+    eventType /* String: INTERNAL, EXTERNAL*/,
+    event /* Object: the actual event to be handeled*/,
+    id /* String */,
+    message /* Object */
+  ){
     this.eventType = eventType
-    this.priority = priority
     this.event = event
+    this.id = id
+    this.message = message
   }
 
   getEventType(){
     return this.eventType
   }
 
-  getPriority(){
-    return this.priority
-  }
-
   getEvent(){
     return this.event
   }
 
+  getId(){
+    return this.id
+  }
+
+  getMessage(){
+    return this.message
+  }
 
 }
 

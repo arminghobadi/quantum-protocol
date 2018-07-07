@@ -1,4 +1,4 @@
-const { Caro, calculateLossP, logData, logStat, deadPath, PSuccessRate, QSuccessRate, pushEvent, handleEvent } = require('./utils')
+const { generateId, Caro, calculateLossP, logData, logStat, deadPath, PSuccessRate, QSuccessRate, pushEvent, handleEvent } = require('./utils')
 const { QuantumMemory } = require('./QuantumMemory')
 const { Event } = require('./Event')
 
@@ -28,9 +28,9 @@ class Repeater {
 	}
 
 	doInrepeaterTransfer(sourceQM /* QuantumMemory */, targetQM /* QuantumMemory */, message /* Object */, linkToSendData /* Link */){
-		pushEvent(new Event('INTERNAL', 1, { source: sourceQM, target: targetQM, link: linkToSendData, message: message } ))
+		pushEvent(new Event('INTERNAL', { source: sourceQM, target: targetQM, link: linkToSendData }, generateId(), message ))
 		logData(`Sending message '${message.content}' inside repeater ${this.getId()} from QM ${sourceQM.getId() + 1} to QM ${targetQM.getId() + 1}`)
-		sourceQM.sendToReceivingQM(targetQM, message, linkToSendData)
+		//sourceQM.sendToReceivingQM(targetQM, message, linkToSendData)
 		console.log(`in repeater ${this.getId()} sending a qubit from ${sourceQM.getId()} to ${targetQM.getId()}`)
 	}
 
@@ -46,18 +46,17 @@ class Repeater {
 				!message.visited.includes(link.otherEnd(this)))
 			.forEach(link =>
 				{ // TODO: this.getId() !== 1 -> what the fuck!! fix this shit! its embaressing!
-					pushEvent(new Event('EXTERNAL', 1, { source: this, target: link.otherEnd(this), link: link, message: message } ))
 					if (message.target !== this && this.getId() !== 1) this.doInrepeaterTransfer(qm, link.getTargetQM(this), messageWithUpdatedVisitedList, link)
 					if (message.source === this) {
-						Caro(() => {
-							message.source = ''
-							if (PSuccessRate()){
-								link.send(message, this)
-							}
-							else {
-								deadPath(message)
-							}
-						})
+						//message.source = ''
+						message.visited = message.visited.concat([this])
+						if (PSuccessRate()){
+							pushEvent(new Event('EXTERNAL', { source: this, target: link.otherEnd(this), link: link }, generateId(), message ))
+							//link.send(message, this)
+						}
+						else {
+							deadPath(message)
+						}
 					}
 			})
 	}
@@ -75,8 +74,6 @@ class Repeater {
 				!message.visited.includes(link.otherEnd(this)))
 			.forEach(link =>
 				{ // TODO: this.getId() !== 1 -> what the fuck!! fix this shit! its embaressing!
-					pushEvent(new Event( 'EXTERNAL', 1, { source: this, target: link.otherEnd, link: link } ))
-
 					if (message.target !== this && this.getId() !== 1) this.doInrepeaterTransfer(qm, link.getTargetQM(this), messageWithUpdatedVisitedList, link)
 					if (message.source === this) Caro(() => {
 						message.source = ''
