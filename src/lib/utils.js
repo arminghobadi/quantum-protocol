@@ -80,34 +80,27 @@ function handleInternal(event){
 }
 
 function handleExternal(event){
-  //console.log(event.getEvent().message)
   message = event.getMessage()
   message.source = ''
-  event.getAction().source.attemptEntanglementForOneBit(message, event.getAction().link.getSourceQM(event.getAction().source))
+  event.getAction().link.send(message, event.getAction().source)
+  //event.getAction().source.attemptEntanglementForOneBit(message, event.getAction().link.getTargetQM(event.getAction().source))
 }
 
 function handleEvent(){
   var tempQueue = eventQueue
-  console.log(`handleEvent`)
   for ( var i = 0 ; i < tempQueue.length ; i++){
     console.log(tempQueue[i].getEventType())
   }
   eventQueue = []
   for (var i = 0 ; i < tempQueue.length ; i++){
-    const event = tempQueue.pop()
-
-    //console.log(event.getMessage())
+    const event = tempQueue[i]
     if (event.getEventType() === 'EXTERNAL'){
-      console.log(`ext`)
       handleExternal(event)
     }
     if (event.getEventType() === 'INTERNAL'){
-      console.log(`int`)
       handleInternal(event)
     }
   }
-
-
   cycle()
   //console.log(event)
 }

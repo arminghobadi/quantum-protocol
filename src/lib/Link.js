@@ -11,7 +11,7 @@ class Link {
   send(message /* Object */, source /* Repeater */){
 		if (message === ''){
 
-		}
+		} 
 		else 
   		this.otherEnd(source).receive(message, this.getTargetQM(this.otherEnd(source)))
   }

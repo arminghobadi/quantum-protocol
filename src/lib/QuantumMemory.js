@@ -8,7 +8,22 @@ class QuantumMemory {
 		this.id = id
 	}
 
-	getId(){
+	getRepeater(){
+		return this.repeater
+	}
+
+	getLink(){
+		var Link = null
+		this.repeater.getLinks()
+			.forEach(link => {
+				if (link.getSourceQM(this.repeater) === this || link.getTargetQM(this.repeater) === this){
+					Link = link
+				}
+			})
+		return Link
+	}
+  
+ 	getId(){
 		return this.id
 	}
 
