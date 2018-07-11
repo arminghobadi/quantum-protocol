@@ -1,4 +1,4 @@
-const { Repeater, Link, cycle, pushEvent, Event, generateId, convertStringToBinary } = require('./lib')
+const { Repeater, Link, cycle, pushEvent, Event, generateId, convertStringToBinary, QuantumNetwork } = require('./lib')
 
 const r1 = new Repeater('Repeater1', 3, 1)
 const r2 = new Repeater('Repeater2', 4, 2)
@@ -11,6 +11,13 @@ const l4 = new Link(r2, r3, r2.getQM(4), r3.getQM(2), 4)
 const l5 = new Link(r1, r4, r1.getQM(3), r4.getQM(1), 5)
 
 const message = { source: r1, target: r3, visited: [r1], content: 1, type: 'Bit' }
+
+const network = 
+new QuantumNetwork(
+  {r1, r2, r3, r4, l1, l2, l3, l4},
+  message
+)
+
 console.log(convertStringToBinary(`armin`))
 r1.findLinksToEmitMessage(message)
   .forEach(link => {
