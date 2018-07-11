@@ -1,4 +1,4 @@
-class Event{
+export class Event{
   /**
   * Event Types:
   *   INTERNAL -> QuantumMemory to QuantumMemory
@@ -34,5 +34,3 @@ class Event{
   }
 
 }
-
-module.exports = { Event }

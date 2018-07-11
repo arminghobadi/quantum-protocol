@@ -1,5 +1,6 @@
-const { PSuccessRate, deadPath } = require('./utils')
-class Link {
+import { PSuccessRate, deadPath } from './utils'
+
+export class Link {
 	constructor(end1 /* Repeater */, end2 /* Repeater */, sourceQM /* QuantumMemory */, targetQM /* QuantumMemory */, id /* Integer */){
 		this.end1 = end1
 		this.end1.addLink(this)
@@ -16,7 +17,7 @@ class Link {
 		} 
 		else {
 			if (PSuccessRate()){
-				this.otherEnd(source).receive(message, this.getTargetQM(this.otherEnd(source)))
+				return this.otherEnd(source).receive(message, this.getTargetQM(this.otherEnd(source)))
 			}
 			else {
 				deadPath(message, { actionType: 'EXTERNAL', source: source, target: this.otherEnd(source) } )
@@ -24,7 +25,10 @@ class Link {
 			
 			
 		}
-  }
+	}
+	getLink(){
+		return this
+	}
 	getId(){
 		return this.id
 	}
@@ -44,5 +48,3 @@ class Link {
 		else throw new Error('something went wrong in otherEnd in Link class')
 	}
 }
-
-module.exports = { Link }

@@ -1,8 +1,9 @@
-const { generateId, calculateLossP, logData, logStat, deadPath, PSuccessRate, pushEvent } = require('./utils')
-const { QuantumMemory } = require('./QuantumMemory')
-const { Event } = require('./Event')
+import { generateId, calculateLossP, logData, logStat, deadPath, PSuccessRate } from './utils'
+import { QuantumMemory } from './QuantumMemory'
+import { Event } from './Event'
+import { QuantumNetwork as QN } from './QuantumNetwork'
 
-class Repeater {
+export class Repeater {
 	//getQM() and list of QMs are never used! Should they be there??
 
 	constructor(name /* String */, numberOfQMs /* Integer */, id /* Integer */) {
@@ -44,6 +45,7 @@ class Repeater {
 	}
 
 	receive(message /* Object */, qm /* QuantumMemory */) {
+		var res = []
 		const messageWithUpdatedVisitedList =
 			Object.assign(
 				{},
@@ -56,23 +58,23 @@ class Repeater {
 		
 		if (messageWithUpdatedVisitedList.target === this) {
 			logStat(`Path: ${messageWithUpdatedVisitedList.visited.reduce((output, repeater) => output + repeater.name + ' ', '')}. Content received: '${message.content}'`)
+			res = new Event('DONE',{source: qm, target: qm, link: qm.getLinkConnectedToThisQM()},'3',message)
 		}
 		else {
 			this.findLinksToEmitMessage(messageWithUpdatedVisitedList)
 			.forEach(link => {
 				switch (messageWithUpdatedVisitedList.type){
 					case 'String':
-						pushEvent(new Event('INTERNAL', { source: qm, target: link.getTargetQM(this), link: link}, generateId(), calculateLossP(messageWithUpdatedVisitedList)))
+						res.push(new Event('INTERNAL', { source: qm, target: link.getTargetQM(this), link: link}, generateId(), calculateLossP(messageWithUpdatedVisitedList)))
 						break
 					case 'Bit':
-						pushEvent(new Event('INTERNAL', { source: qm, target: link.getTargetQM(this), link: link}, generateId(), messageWithUpdatedVisitedList))
+						res.push(new Event('INTERNAL', { source: qm, target: link.getTargetQM(this), link: link}, generateId(), messageWithUpdatedVisitedList))
 						break
 					default:
 						break
 				}
 			})
 		}
+		return res
 	}
 }
-
-module.exports = { Repeater }

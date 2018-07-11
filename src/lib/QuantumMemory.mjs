@@ -1,6 +1,8 @@
-const { calculateLossQ, logData, QSuccessRate, deadPath, pushEvent, generateId } = require('./utils')
-const { Event } = require('./Event')
-class QuantumMemory {
+import { calculateLossQ, logData, QSuccessRate, deadPath, generateId } from './utils'
+import { Event } from './Event'
+import { QuantumNetwork as QN } from './QuantumNetwork'
+
+export class QuantumMemory {
 
 	constructor(repeater /* Repeater */, id /* Integer */) {
 		this.repeater = repeater
@@ -34,13 +36,13 @@ class QuantumMemory {
 					// TODO: Is this a deadPath?
 				} else {
 					console.log(logData(`A message with content '${message.content}' was received and is being sent to ${target.getId()} through link ${linkToSendData.getId()}`))
-					target.receiveDataFromQM(calculateLossQ(message), linkToSendData)
+					return target.receiveDataFromQM(calculateLossQ(message), linkToSendData)
 				}
 				break
 			case 'Bit':
 				if (QSuccessRate()){
 					console.log(logData(`A message with content '${message.content}' was received and is being sent to ${target.getId()} through link ${linkToSendData.getId()}`))
-					target.receiveDataFromQM(message, linkToSendData)
+					return target.receiveDataFromQM(message, linkToSendData)
 				}
 				else {
 					deadPath(message, { actionType: 'INTERNAL', source: this, target: target } )
@@ -55,10 +57,8 @@ class QuantumMemory {
 	receiveDataFromQM(message /* Object */, linkToSendData /* Link */){
 		console.log(logData(`Message received. Content: '${message.content}'`))
 		const event = new Event('EXTERNAL', { source: this.repeater, target: linkToSendData.otherEnd(this.repeater), link: linkToSendData }, generateId(), message )
-		pushEvent(event)
+		//QN.addEvent(event)
 		return event
 	}
 
 }
-
-module.exports = { QuantumMemory }

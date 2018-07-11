@@ -1,4 +1,4 @@
-const { Repeater, Link, cycle, pushEvent, Event, generateId, convertStringToBinary, QuantumNetwork } = require('./lib')
+import { Repeater, Link, convertStringToBinary, QuantumNetwork } from './lib'
 
 const r1 = new Repeater('Repeater1', 3, 1)
 const r2 = new Repeater('Repeater2', 4, 2)
@@ -13,16 +13,12 @@ const l5 = new Link(r1, r4, r1.getQM(3), r4.getQM(1), 5)
 const message = { source: r1, target: r3, visited: [r1], content: 1, type: 'Bit' }
 
 const network = 
-new QuantumNetwork(
-  {r1, r2, r3, r4, l1, l2, l3, l4},
-  message
-)
+  new QuantumNetwork(
+    { repeaters: [r1, r2, r3, r4], 
+      links: [l1, l2, l3, l4, l5]
+    },
+    message
+  )
+network.run()
 
 console.log(convertStringToBinary(`armin`))
-r1.findLinksToEmitMessage(message)
-  .forEach(link => {
-    pushEvent(new Event('EXTERNAL', {source: r1, target: link.otherEnd(r1), link: link}, generateId(), message))
-  })
-cycle()
-
-// maybe have a class called "Network" that mimics the whole network and does all the qubit transfers
