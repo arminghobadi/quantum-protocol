@@ -6,9 +6,6 @@ const Q_LOSS_CHANCE_ = 3 // From 1 to 10
 const P_SUCCESS_RATE_ = 0 // 0-> all success ; 10 -> all fail
 const Q_SUCCESS_RATE_ = 0
 
-var eventQueue = []
-var cycleCounter = 1
-
 export function convertStringToBinary(messageContent) {
   var res = ''
   for (var i = 0; i < messageContent.length; i++) {

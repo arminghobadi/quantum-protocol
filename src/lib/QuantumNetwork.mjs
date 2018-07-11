@@ -15,13 +15,12 @@ export class QuantumNetwork{
 
   addEvent(event /* Event */){
     if (event.getEventType() === 'DONE'){
-
+      // TODO: Here is where you should do logStat()
+      // Also, somehow this check has to happen in handleEvents()
     } else {
       console.log(logData(`## type: ${event.getEventType()} source: ${event.getAction().source.getId()}, target: ${event.getAction().target.getId()}`))
       this.eventQueue.push(event)
     }
-    
-    
   }
 
   getEventQueue(){
@@ -62,6 +61,7 @@ export class QuantumNetwork{
     this.eventQueue = []
     for (var i = 0 ; i < tempQueue.length ; i++){
       const event = tempQueue[i]
+      // TODO: There should be another event type called 'DEAD'
       switch(event.getEventType()){
         case 'EXTERNAL':
           this.handleExternal(event)
