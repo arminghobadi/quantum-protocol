@@ -1,17 +1,23 @@
 const P_LOSS_CHANCE_ = 3 // From 1 to 10
 const Q_LOSS_CHANCE_ = 3 // From 1 to 10
-const P_SUCCESS_RATE_ = 0 // 0-> all success ; 10 -> all fail
-const Q_SUCCESS_RATE_ = 0
+const P_SUCCESS_RATE_ = 5 // 0-> all success ; 10 -> all fail
+const Q_SUCCESS_RATE_ = 5
 const fs = require('fs')
 const getRandomNumberWithProbability = require('./actions')
-//const { sendToReceivingQM } = require('./QuantumMemory')
-const { repeater } = require('./Repeater')
-//const { QuantumMemory} = require('./QuantumMemory')
 
 var eventQueue = []
+var cycleCounter = 1
+
+function convertStringToBinary(messageContent) {
+  var res = ''
+  for (var i = 0; i < messageContent.length; i++) {
+      res += messageContent[i].charCodeAt(0).toString(2) + " "
+  }
+  return res
+}
 
 function generateId() {
-  return '_' + Math.random().toString(36).substr(2, 9);
+  return '_' + Math.random().toString(36).substr(2, 9)
 }
 
 function rand1to10(){
@@ -29,49 +35,43 @@ function QSuccessRate(){
 function calculateLossP(message /* Object */){
   const rand = rand1to10()
   if (rand < P_LOSS_CHANCE_){
-    console.log('rand came less than 3')
-    // TODO: this is where the path should die!! it just throws an error right now which i think is good enough!
-    // im not sure actually. should i do something else?!
+    console.log('rand came less than 3 in calculateLossP')
     logStat(`Path died at ${message.visited.reduce((output, repeater) => output + repeater.name + ' ', '')}`)
     return ''
   }
-  const messageWithLoss = {
-    //source: message.source,
-    type: message.type,
-    target: message.target,
-    visited: message.visited,
-    content: message.content.substring(0, Math.floor( (message.content.length * (rand) ) / (10) ) ) || ''
-  }
-  return messageWithLoss
+  const messageWithUpdatedContent = 
+    Object.assign(
+      {},
+      message,
+      { content: message.content.substring(0, Math.floor( (message.content.length * (rand) ) / (10) ) ) || '' }
+    )
+  return messageWithUpdatedContent
 }
 
 function calculateLossQ(message /* Object */){
   const rand = rand1to10()
   if (rand < Q_LOSS_CHANCE_){
-    console.log('rand came less than 3')
-    // TODO: this is where the path should die!! it just throws an error right now which i think is good enough!
-    // im not sure actually. should i do something else?!
+    console.log('rand came less than 3 in calculateLossQ')
     logStat(`Path died at ${message.visited.reduce((output, repeater) => output + repeater.name + ' ', '')}`)
     return ''
   }
-  const messageWithLoss = {
-    //source: message.source,
-    type: message.type,
-    target: message.target,
-    visited: message.visited,
-    content: message.content.substring(0, Math.floor( (message.content.length * (rand) ) / (10) ) ) || ''
-  }
-  return messageWithLoss
+  const messageWithUpdatedContent = 
+    Object.assign(
+      {},
+      message,
+      { content: message.content.substring(0, Math.floor( (message.content.length * (rand) ) / (10) ) ) || '' }
+    )
+  return messageWithUpdatedContent
 }
 
 function pushEvent(event /* Event */){
   eventQueue.push(event)
-  console.log(`------- type: ${event.getEventType()} source: ${event.getAction().source.getId()}, target: ${event.getAction().target.getId()}`)
-  logData(`## type: ${event.getEventType()} source: ${event.getAction().source.getId()}, target: ${event.getAction().target.getId()}`)
-
+  console.log(logData(`## type: ${event.getEventType()} source: ${event.getAction().source.getId()}, target: ${event.getAction().target.getId()}`))
 }
 
 function cycle(){
+  console.log(logData(`Cycle ${cycleCounter} done`))
+  ++cycleCounter
   setTimeout(() => handleEvent(), 1000 /* miliseconds */)
 }
 
@@ -83,14 +83,10 @@ function handleExternal(event){
   message = event.getMessage()
   message.source = ''
   event.getAction().link.send(message, event.getAction().source)
-  //event.getAction().source.attemptEntanglementForOneBit(message, event.getAction().link.getTargetQM(event.getAction().source))
 }
 
 function handleEvent(){
   var tempQueue = eventQueue
-  for ( var i = 0 ; i < tempQueue.length ; i++){
-    console.log(tempQueue[i].getEventType())
-  }
   eventQueue = []
   for (var i = 0 ; i < tempQueue.length ; i++){
     const event = tempQueue[i]
@@ -101,32 +97,32 @@ function handleEvent(){
       handleInternal(event)
     }
   }
-  cycle()
-  //console.log(event)
+  if (tempQueue.length !== 0){
+    cycle()
+  }
+  else{
+    console.log(logData(`--------------`))
+    logStat(`--------------`)
+  }
 }
 
-//THIS.NAME IS UNDEFINED!!!!
-function deadPath(message){
-  logData(`${this.name} received: '${message.content}'
-    This repeater has already visited ` + message.visited.reduce((output, repeater) => output + repeater.name + ' ', ''))
-  console.log(`FAIL${this.name} reveived: '${message.content}'
-		This repeater has already visited ` + message.visited.reduce((output, repeater) => output + repeater.name + ' ', ''))
+function deadPath(message /* Object */, failurePoing /* Object */){
+  const reason = `while doing an ${failurePoing.actionType} event from ${failurePoing.actionType === 'EXTERNAL' ? 'repeater' : 'QM'} ${failurePoing.source.getId()} to ${failurePoing.target.getId()}`
+  console.log(logData(`->Path ${message.visited.reduce((output, repeater) => output + repeater.name + ' ', '')} died ${reason}`))
 }
 
 function logData(data){
   fs.appendFile('log.txt', `${data}\n`, 'utf8', (err) => {
     if (err) console.log(err.message)
   })
+  return data
 }
 
 function logStat(data){
   fs.appendFile('stat.txt', `${data}\n`, 'utf8', (err) => {
     if (err) console.log(err.message)
   })
+  return data
 }
 
-function Caro(operation){
-  setTimeout(operation, rand1to10() * 500 /* miliseconds */)
-}
-
-module.exports = { cycle, generateId, Caro, logData, logStat, calculateLossP, calculateLossQ, rand1to10, PSuccessRate, QSuccessRate, deadPath, pushEvent, handleEvent }
+module.exports = { convertStringToBinary, cycle, generateId, logData, logStat, calculateLossP, calculateLossQ, rand1to10, PSuccessRate, QSuccessRate, deadPath, pushEvent, handleEvent }

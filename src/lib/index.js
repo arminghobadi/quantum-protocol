@@ -3,6 +3,6 @@ const { Link } = require('./Link')
 const { QuantumMemory } = require('./QuantumMemory')
 const { getRandomNumberWithProbability } = require('./actions')
 const { Event } = require('./Event')
-const { cycle, logData } = require('./utils')
+const { cycle, logData, generateId, pushEvent, convertStringToBinary } = require('./utils')
 
-module.exports = { Repeater, Link, QuantumMemory, getRandomNumberWithProbability, Event, cycle, logData }
+module.exports = { convertStringToBinary, Repeater, Link, QuantumMemory, getRandomNumberWithProbability, Event, cycle, logData, generateId, pushEvent }
