@@ -22,6 +22,7 @@ class Link {
 				deadPath(message, { actionType: 'EXTERNAL', source: source, target: this.otherEnd(source) } )
 			}
 			
+			
 		}
   }
 	getId(){

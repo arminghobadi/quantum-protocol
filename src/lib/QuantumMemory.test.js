@@ -1,4 +1,4 @@
-import { QuantumMemory as QM} from './QuantumMemory'
+import { QuantumMemory as QM } from './QuantumMemory'
 import { Repeater } from './Repeater'
 describe('whatever', () => {
 
@@ -13,7 +13,7 @@ describe('whatever', () => {
 
     qm1.sendToReceivingQM(qm2, mockMessage, mockLink)
 
-    expect(mountedComponent.contains(<LoginForm/>)).toBe(true)
+    expect(mountedComponent.contains()).toBe(true)
   })
 
 })

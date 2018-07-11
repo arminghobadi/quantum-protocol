@@ -54,7 +54,9 @@ class QuantumMemory {
 
 	receiveDataFromQM(message /* Object */, linkToSendData /* Link */){
 		console.log(logData(`Message received. Content: '${message.content}'`))
-		pushEvent(new Event('EXTERNAL', { source: this.repeater, target: linkToSendData.otherEnd(this.repeater), link: linkToSendData }, generateId(), message ))
+		const event = new Event('EXTERNAL', { source: this.repeater, target: linkToSendData.otherEnd(this.repeater), link: linkToSendData }, generateId(), message )
+		pushEvent(event)
+		return event
 	}
 
 }
