@@ -1,7 +1,6 @@
-import { generateId, calculateLossP, logData, logStat, deadPath, PSuccessRate } from './utils'
+import { generateId, calculateLossP, logData, PSuccessRate } from './utils'
 import { QuantumMemory } from './QuantumMemory'
 import { Event } from './Event'
-import { QuantumNetwork as QN } from './QuantumNetwork'
 
 export class Repeater {
 	//getQM() and list of QMs are never used! Should they be there??
@@ -14,6 +13,10 @@ export class Repeater {
 		for (var i = 1 ; i <= numberOfQMs ; i++){
 			this.QMs.push(new QuantumMemory(this, i))
 		}
+	}
+
+	isRepeater(obj){
+		return this === obj ? true : false
 	}
 
 	getId(){
@@ -33,7 +36,7 @@ export class Repeater {
 	}
 
 	findLinksToEmitMessage( message ){
-		var links = []
+		let links = []
 		this.links
 			.filter(link =>
 				!message.visited.includes(link.otherEnd(this)))
@@ -45,7 +48,7 @@ export class Repeater {
 	}
 
 	receive(message /* Object */, qm /* QuantumMemory */) {
-		var res = []
+		let result = []
 		const messageWithUpdatedVisitedList =
 			Object.assign(
 				{},
@@ -56,25 +59,23 @@ export class Repeater {
 		console.log(logData(`${this.name} received: '${messageWithUpdatedVisitedList.content}'
 			This repeater has already visited ` + messageWithUpdatedVisitedList.visited.reduce((output, repeater) => output + repeater.name + ' ', '')))
 		
-		if (messageWithUpdatedVisitedList.target === this) {
-			logStat(`Path: ${messageWithUpdatedVisitedList.visited.reduce((output, repeater) => output + repeater.name + ' ', '')}. Content received: '${message.content}'`)
-			res = new Event('DONE',{source: qm, target: qm, link: qm.getLinkConnectedToThisQM()},'3',message)
-		}
-		else {
+		if (messageWithUpdatedVisitedList.target === this)
+			result.push( new Event('DONE',{source: qm, target: qm, link: qm.getLinkConnectedToThisQM()}, generateId(), messageWithUpdatedVisitedList) )
+		else 
 			this.findLinksToEmitMessage(messageWithUpdatedVisitedList)
 			.forEach(link => {
 				switch (messageWithUpdatedVisitedList.type){
 					case 'String':
-						res.push(new Event('INTERNAL', { source: qm, target: link.getTargetQM(this), link: link}, generateId(), calculateLossP(messageWithUpdatedVisitedList)))
+						result.push(new Event('INTERNAL', { source: qm, target: link.getTargetQM(this), link: link}, generateId(), calculateLossP(messageWithUpdatedVisitedList)))
 						break
 					case 'Bit':
-						res.push(new Event('INTERNAL', { source: qm, target: link.getTargetQM(this), link: link}, generateId(), messageWithUpdatedVisitedList))
+						result.push(new Event('INTERNAL', { source: qm, target: link.getTargetQM(this), link: link}, generateId(), messageWithUpdatedVisitedList))
 						break
 					default:
 						break
 				}
 			})
-		}
-		return res
+		
+		return result
 	}
 }

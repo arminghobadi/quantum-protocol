@@ -1,4 +1,5 @@
 import { Repeater, Link, convertStringToBinary, QuantumNetwork } from './lib'
+const numberOfTimesRunningTheProgram = 1
 
 const r1 = new Repeater('Repeater1', 3, 1)
 const r2 = new Repeater('Repeater2', 4, 2)
@@ -12,13 +13,13 @@ const l5 = new Link(r1, r4, r1.getQM(3), r4.getQM(1), 5)
 
 const message = { source: r1, target: r3, visited: [r1], content: 1, type: 'Bit' }
 
-const network = 
-  new QuantumNetwork(
-    { repeaters: [r1, r2, r3, r4], 
-      links: [l1, l2, l3, l4, l5]
-    },
-    message
-  )
-network.run()
-
-console.log(convertStringToBinary(`armin`))
+for (var i = 0 ; i < numberOfTimesRunningTheProgram ; i++) {(
+    new QuantumNetwork(
+      { repeaters: [r1, r2, r3, r4], 
+        links: [l1, l2, l3, l4, l5]
+      },
+      message
+    )
+  ).run()
+}
+//console.log(convertStringToBinary(`armin`))

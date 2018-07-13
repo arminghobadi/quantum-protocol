@@ -9,6 +9,11 @@ export class QuantumMemory {
 		this.id = id
 	}
 
+	// TODO: This function is basically doing the job of typeOf
+	isRepeater(obj){
+		return obj === this ? false : true
+	}
+
 	getRepeater(){
 		return this.repeater
 	}
@@ -45,7 +50,9 @@ export class QuantumMemory {
 					return target.receiveDataFromQM(message, linkToSendData)
 				}
 				else {
-					deadPath(message, { actionType: 'INTERNAL', source: this, target: target } )
+					
+					return new Event( 'DEAD', { source: this, target: target, link: linkToSendData }, generateId(), message )  
+					//deadPath(message, { actionType: 'INTERNAL', source: this, target: target } )
 				}
 				break
 			default:

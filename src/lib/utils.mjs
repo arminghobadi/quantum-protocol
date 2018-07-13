@@ -3,11 +3,11 @@ import {getRandomNumberWithProbability} from './actions'
 
 const P_LOSS_CHANCE_ = 3 // From 1 to 10
 const Q_LOSS_CHANCE_ = 3 // From 1 to 10
-const P_SUCCESS_RATE_ = 0 // 0-> all success ; 10 -> all fail
-const Q_SUCCESS_RATE_ = 0
+const P_SUCCESS_RATE_ = 5 // 0-> all success ; 10 -> all fail
+const Q_SUCCESS_RATE_ = 5
 
 export function convertStringToBinary(messageContent) {
-  var res = ''
+  let res = ''
   for (var i = 0; i < messageContent.length; i++) {
       res += messageContent[i].charCodeAt(0).toString(2) + " "
   }
@@ -76,6 +76,13 @@ export function logData(data){
 
 export function logStat(data){
   fs.appendFile('stat.txt', `${data}\n`, 'utf8', (err) => {
+    if (err) console.log(err.message)
+  })
+  return data
+}
+
+export function logVis(data){
+  fs.appendFile('vis.txt', `${data}\n`, 'utf8', (err) => {
     if (err) console.log(err.message)
   })
   return data

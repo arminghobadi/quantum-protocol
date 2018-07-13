@@ -1,4 +1,4 @@
-import { generateId, logData, logStat } from './utils'
+import { generateId, logData, logStat, logVis } from './utils'
 import { Event } from './Event'
 
 export class QuantumNetwork{
@@ -11,16 +11,12 @@ export class QuantumNetwork{
     this.targetRepeater = message.repeater
     this.eventQueue = []
     this.cycleCounter = 1
+    this.successfullPaths = []
   }
 
   addEvent(event /* Event */){
-    if (event.getEventType() === 'DONE'){
-      // TODO: Here is where you should do logStat()
-      // Also, somehow this check has to happen in handleEvents()
-    } else {
       console.log(logData(`## type: ${event.getEventType()} source: ${event.getAction().source.getId()}, target: ${event.getAction().target.getId()}`))
       this.eventQueue.push(event)
-    }
   }
 
   getEventQueue(){
@@ -43,7 +39,6 @@ export class QuantumNetwork{
   }
   
   handleInternal(event){
-    
     this.addEvent(event.getAction().source.sendToReceivingQM(event.getAction().target, event.getMessage(), event.getAction().link))
   }
   
@@ -57,11 +52,10 @@ export class QuantumNetwork{
   }
   
   handleEvents(){
-    var tempQueue = this.eventQueue
+    let tempQueue = this.eventQueue
     this.eventQueue = []
     for (var i = 0 ; i < tempQueue.length ; i++){
       const event = tempQueue[i]
-      // TODO: There should be another event type called 'DEAD'
       switch(event.getEventType()){
         case 'EXTERNAL':
           this.handleExternal(event)
@@ -70,20 +64,42 @@ export class QuantumNetwork{
           this.handleInternal(event)
           break
         case 'DONE':
+          this.handleDone(event)
+          break
+        case 'DEAD':
+          this.handleDead(event)
           break
         default:
           break
       }
     }
-    if (tempQueue.length !== 0){
-      this.cycle()
-    }
-    else{
-      console.log(logData(`--------------`))
-      logStat(`--------------`)
-    }
+    ( tempQueue.length !== 0 ) ? this.cycle() : this.onTerminate()
   }
-  
 
+  onTerminate() {
+    console.log(logData(`--------------`))
+    logStat(`--------------`)
+    const numberOfSuccessfullPaths = this.successfullPaths.length
+    let pathLenghts = ''
+    for ( var i = 0 ; i < numberOfSuccessfullPaths ; i++ ) {
+      pathLenghts += this.successfullPaths[i].split(' ').length - 1 + ' '
+    }
+    console.log(logVis(`${numberOfSuccessfullPaths} ${pathLenghts} `))
+  }
+
+  handleDead(event){
+    const reason =
+      (event.getAction().source.isRepeater(event.getAction().source)) ?
+        `while doing an EXTERNAL event from repeater ${event.getAction().source.getId()} to ${event.getAction().target.getId()} `
+      : `while doing an INTERNAL event from QM ${event.getAction().source.getId()} to ${event.getAction().target.getId()} `
+    
+    console.log(logStat(`Dead Path: ${event.getMessage().visited.reduce((output, repeater) => output + repeater.name + ' ', ' ')} died ${reason} `))
+  }
+
+  handleDone(event){
+    this.successfullPaths.push(event.getMessage().visited.reduce((output, repeater) => output + repeater.name + ' ', '' ))
+    const message = event.getMessage()
+    console.log(logStat(`Path: ${message.visited.reduce((output, repeater) => output + repeater.name + ' ', '')}. Content received: '${message.content}'`))
+  }
 
 }

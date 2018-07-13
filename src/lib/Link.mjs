@@ -1,4 +1,5 @@
-import { PSuccessRate, deadPath } from './utils'
+import { PSuccessRate, deadPath, generateId } from './utils'
+import { Event } from './Event'
 
 export class Link {
 	constructor(end1 /* Repeater */, end2 /* Repeater */, sourceQM /* QuantumMemory */, targetQM /* QuantumMemory */, id /* Integer */){
@@ -20,7 +21,8 @@ export class Link {
 				return this.otherEnd(source).receive(message, this.getTargetQM(this.otherEnd(source)))
 			}
 			else {
-				deadPath(message, { actionType: 'EXTERNAL', source: source, target: this.otherEnd(source) } )
+				return [new Event('DEAD', { source: source, target: this.otherEnd(source), link: this }, generateId(), message)]
+				//deadPath(message, { actionType: 'EXTERNAL', source: source, target: this.otherEnd(source) } )
 			}
 			
 			
