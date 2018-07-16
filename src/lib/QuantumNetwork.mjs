@@ -82,7 +82,7 @@ export class QuantumNetwork{
     const numberOfSuccessfullPaths = this.successfullPaths.length
     let pathLenghts = ''
     for ( var i = 0 ; i < numberOfSuccessfullPaths ; i++ ) {
-      pathLenghts += this.successfullPaths[i].split(' ').length - 1 + ' '
+      pathLenghts += this.successfullPaths[i].split(' ').length - 2 + ' '
     }
     console.log(logVis(`${numberOfSuccessfullPaths} ${pathLenghts} `))
   }
