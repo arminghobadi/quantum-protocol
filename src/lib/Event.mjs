@@ -6,7 +6,7 @@ export class Event{
   */
 
   constructor(
-    eventType /* String: INTERNAL, EXTERNAL*/,
+    eventType /* String: INTERNAL, EXTERNAL, DEAD, DONE, ACK*/,
     action /* Object: the actual event to be handeled*/,
     id /* String */,
     message /* Object */

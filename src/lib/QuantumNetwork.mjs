@@ -3,12 +3,9 @@ import { Event } from './Event'
 
 export class QuantumNetwork{
 
-  constructor( network /* Object */, message /* Object */){
-    this.repeaters = network.repeaters
-    this.links = network.links
-    this.message = message
-    this.sourceRepeater = message.source
-    this.targetRepeater = message.repeater
+  constructor( network /* Object */ ){
+    this.repeaters = network.repeaters /* Array<Repeater> */
+    this.links = network.links  /* Array<Link> */
     this.eventQueue = []
     this.cycleCounter = 1
     this.successfullPaths = []
@@ -23,11 +20,11 @@ export class QuantumNetwork{
     return this.eventQueue
   }
 
-  run(){
+  run(message){
     console.log(this.repeaters[0].getId())
-    this.sourceRepeater.findLinksToEmitMessage(this.message)
+    message.source.findLinksToEmitMessage(message)
       .forEach(link => {
-        this.addEvent(new Event('EXTERNAL', {source: this.sourceRepeater, target: link.otherEnd(this.sourceRepeater), link: link}, generateId(), this.message))
+        this.addEvent(new Event('EXTERNAL', {source: message.source, target: link.otherEnd(message.source), link: link}, generateId(), message))
       })
     this.cycle()
   }
@@ -81,6 +78,9 @@ export class QuantumNetwork{
     logStat(`--------------`)
     const numberOfSuccessfullPaths = this.successfullPaths.length
     let pathLenghts = ''
+    if (numberOfSuccessfullPaths > 0){
+      //this.sendAck()
+    }
     for ( var i = 0 ; i < numberOfSuccessfullPaths ; i++ ) {
       pathLenghts += this.successfullPaths[i].split(' ').length - 2 + ' '
     }

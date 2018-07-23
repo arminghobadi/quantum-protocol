@@ -30,7 +30,7 @@ function createIndex(){
   return new Promise((resolve, reject) => {
     fs.writeFile(
       'index.mjs',
-      "import { Repeater, Link, getRandomNumberWithProbability, QuantumNetwork } from './lib'\nconst numberOfTimesRunningTheProgram = 1\n\n" ,
+      "import { Repeater, Link, getRandomNumberWithProbability, convertStringToBinary, QuantumNetwork } from './lib'\nconst numberOfTimesRunningTheProgram = 1\n\n" ,
       (err) => { if (err) reject(err); resolve()}
     )
   })
