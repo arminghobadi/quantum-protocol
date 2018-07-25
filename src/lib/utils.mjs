@@ -3,8 +3,8 @@ import {getRandomNumberWithProbability} from './actions'
 
 const P_LOSS_CHANCE_ = 3 // From 1 to 10
 const Q_LOSS_CHANCE_ = 3 // From 1 to 10
-const P_SUCCESS_RATE_ = 0 // 0-> all success ; 10 -> all fail
-const Q_SUCCESS_RATE_ = 0
+const P_SUCCESS_RATE_ = 10 // 0-> all fail ; 10 -> all success
+const Q_SUCCESS_RATE_ = 7
 
 export function convertStringToBinary(messageContent) {
   let res = ''
@@ -27,11 +27,11 @@ export function rand1to10(){
 }
 
 export function PSuccessRate(){
-  return rand1to10() >= P_SUCCESS_RATE_
+  return rand1to10() <= P_SUCCESS_RATE_
 }
 
 export function QSuccessRate(){
-  return rand1to10() >= Q_SUCCESS_RATE_
+  return rand1to10() <= Q_SUCCESS_RATE_
 }
 
 export function calculateLossP(message /* Object */){
@@ -72,9 +72,9 @@ export function deadPath(message /* Object */, failurePoing /* Object */){
 }
 
 export function logData(data){
-  fs.appendFile('log.txt', `${data}\n`, 'utf8', (err) => {
-    if (err) console.log(err.message)
-  })
+  // fs.appendFile('log.txt', `${data}\n`, 'utf8', (err) => {
+  //   if (err) console.log(err.message)
+  // })
   return data
 }
 

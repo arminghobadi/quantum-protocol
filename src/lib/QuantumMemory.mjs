@@ -34,30 +34,39 @@ export class QuantumMemory {
 	}
 
 	sendToReceivingQM(target /* QuantumMemory */, message /* Object */, linkToSendData /* Link */){
-		switch(message.type){
-			case 'String':
-				// TODO: What the hell is this if statement? When will the message become an empty string instead of an object?!
-				if (message === ''){
-					// TODO: Is this a deadPath?
-				} else {
-					console.log(logData(`A message with content '${message.content}' was received and is being sent to ${target.getId()} through link ${linkToSendData.getId()}`))
-					return target.receiveDataFromQM(calculateLossQ(message), linkToSendData)
-				}
-				break
-			case 'Bit':
-				if (QSuccessRate()){
-					console.log(logData(`A message with content '${message.content}' was received and is being sent to ${target.getId()} through link ${linkToSendData.getId()}`))
-					return target.receiveDataFromQM(message, linkToSendData)
-				}
-				else {
+		if (QSuccessRate()){
+			console.log(logData(`A message with content '${message.content}' was received and is being sent to ${target.getId()} through link ${linkToSendData.getId()}`))
+			return target.receiveDataFromQM(message, linkToSendData)
+		}
+		else {
+			
+			return new Event( 'DEAD', { source: this, target: target, link: linkToSendData }, generateId(), message )  
+			//deadPath(message, { actionType: 'INTERNAL', source: this, target: target } )
+		}
+		// switch(message.type){
+		// 	case 'String':
+		// 		// TODO: What the hell is this if statement? When will the message become an empty string instead of an object?!
+		// 		if (message === ''){
+		// 			// TODO: Is this a deadPath?
+		// 		} else {
+		// 			console.log(logData(`A message with content '${message.content}' was received and is being sent to ${target.getId()} through link ${linkToSendData.getId()}`))
+		// 			return target.receiveDataFromQM(calculateLossQ(message), linkToSendData)
+		// 		}
+		// 		break
+		// 	case 'Bit':
+		// 		if (QSuccessRate()){
+		// 			console.log(logData(`A message with content '${message.content}' was received and is being sent to ${target.getId()} through link ${linkToSendData.getId()}`))
+		// 			return target.receiveDataFromQM(message, linkToSendData)
+		// 		}
+		// 		else {
 					
-					return new Event( 'DEAD', { source: this, target: target, link: linkToSendData }, generateId(), message )  
-					//deadPath(message, { actionType: 'INTERNAL', source: this, target: target } )
-				}
-				break
-			default:
-				break
-		}	
+		// 			return new Event( 'DEAD', { source: this, target: target, link: linkToSendData }, generateId(), message )  
+		// 			//deadPath(message, { actionType: 'INTERNAL', source: this, target: target } )
+		// 		}
+		// 		break
+		// 	default:
+		// 		break
+		// }	
 
 	}
 

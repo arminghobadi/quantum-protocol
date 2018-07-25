@@ -1,21 +1,48 @@
 import { Receiver } from "./Receiver.mjs";
 
+const TIMEOUT_ = 2000 /* 2 seconds */
+
 export class Sender{
-  constructor(sender /* Repeater */, network /* QuantumNetwork */, message /* Object */, receiver /* Repeater */){
+  constructor({sender /* Repeater */, network /* QuantumNetwork */, message /* Object */, receiver /* Repeater */}){
     // TODO: the message here shouldnt be an object. it should just be a string ( or whatever ) and then make the object here, then send it
     this.sender = sender
-    this.network = network
     this.message = message
-    this.receiver = receiver
+    this.network = network
     this.receiver = new Receiver(receiver, network, this)
+    this.sentMessages = []
+    this.sender.setSender(this)
+    this.sender.isSender = true
   }
 
-  send(){
-    this.network.run(this.message)
+  handleTimeout(message){
+    this.sentMessages.find( x => x.message.id === message.id ) 
+    ? 
+      console.log('ddd')//this.send(message)
+    : 
+      console.log('ACK received already')
   }
 
-  receiveACK(){
+  send(message){
+    //console.log('here' + Date.now())
+    this.sentMessages.push({ 
+      message, 
+      timeout: 
+        setTimeout(() => {
+          this.handleTimeout(message)
+        }, TIMEOUT_) 
+    })
+    this.network.run(message)
+    //this.receiveACK(message)
+  }
 
+  receiveACK(message){
+    this.sentMessages.splice( 
+      this.sentMessages.indexOf(
+        this.sentMessages.find( 
+          x => x.message.id === message.id 
+        ))
+    ,1 )
+    
   }
   
-}
+} 

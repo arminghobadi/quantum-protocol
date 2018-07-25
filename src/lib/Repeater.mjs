@@ -13,10 +13,22 @@ export class Repeater {
 		for (var i = 1 ; i <= numberOfQMs ; i++){
 			this.QMs.push(new QuantumMemory(this, i))
 		}
+		this.receiver = null
+		this.sender = null
+		this.isSender = false
+		this.isReceiver = false
 	}
 
 	isRepeater(obj){
 		return this === obj ? true : false
+	}
+
+	setReceiver(receiver){
+		this.receiver = receiver
+	}
+
+	setSender(sender){
+		this.sender = sender
 	}
 
 	getId(){
@@ -59,8 +71,18 @@ export class Repeater {
 		console.log(logData(`${this.name} received: '${messageWithUpdatedVisitedList.content}'
 			This repeater has already visited ` + messageWithUpdatedVisitedList.visited.reduce((output, repeater) => output + repeater.name + ' ', '')))
 		
-		if (messageWithUpdatedVisitedList.target === this)
+		if (messageWithUpdatedVisitedList.target === this){
 			result.push( new Event('DONE',{source: qm, target: qm, link: qm.getLinkConnectedToThisQM()}, generateId(), messageWithUpdatedVisitedList) )
+			if (messageWithUpdatedVisitedList.type === 'ACK'){
+				this.sender.receive(messageWithUpdatedVisitedList)
+				console.log('++++++++++++++++++++++++++++')
+			}
+			else {
+				//this.receiver.receive(messageWithUpdatedVisitedList)
+				console.log('----------------------------')
+			}
+				
+		}
 		else 
 			this.findLinksToEmitMessage(messageWithUpdatedVisitedList)
 			.forEach(link => {
