@@ -1,4 +1,5 @@
 import { Receiver } from "./Receiver.mjs";
+import { logData } from './utils'
 
 const TIMEOUT_ = 2000 /* 2 seconds */
 
@@ -17,9 +18,9 @@ export class Sender{
   handleTimeout(message){
     this.sentMessages.find( x => x.message.id === message.id ) 
     ? 
-      console.log('ddd')//this.send(message)
+      this.send(message)
     : 
-      console.log('ACK received already')
+      console.log(logData('ACK received already'))
   }
 
   send(message){
@@ -36,6 +37,11 @@ export class Sender{
   }
 
   receiveACK(message){
+    const element = this.sentMessages.find(x => x.message.id === message.content)
+    if (element){
+      clearTimeout(element.timeout)
+    }
+    this.network.handleACK(message)
     this.sentMessages.splice( 
       this.sentMessages.indexOf(
         this.sentMessages.find( 

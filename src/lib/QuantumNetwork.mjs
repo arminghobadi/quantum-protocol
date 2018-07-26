@@ -51,8 +51,8 @@ export class QuantumNetwork{
     }
   }
   
-  handleACK(event){
-
+  handleACK(message){
+    this.eventQueue = this.eventQueue.filter( event => event.getMessage().id !== message.id) // TODO: im not sure if its message.id or message.content
   }
 
   handleEvents(){
@@ -93,7 +93,7 @@ export class QuantumNetwork{
     for ( var i = 0 ; i < numberOfSuccessfullPaths ; i++ ) {
       pathLenghts += this.successfullPaths[i].split(' ').length - 2 + ' '
     }
-    this.path.target.receiver.receive(this.path)
+    //this.path.target.receiver.receive(this.path)
     console.log(logVis(`${numberOfSuccessfullPaths} ${pathLenghts} `))
     //console.log(logVis(`${pathLenghts} `))
   }
@@ -113,7 +113,12 @@ export class QuantumNetwork{
     const message = event.getMessage()
     this.path = message
     console.log(logStat(`Path: ${message.visited.reduce((output, repeater) => output + repeater.name + ' ', '')}. Content received: '${message.content}'`))
-    
+    if (message.type === 'ACK'){
+      message.target.sender.receiveACK(message)
+    }
+    else {
+      message.target.receiver.receive(message)
+    }
     
   }
 

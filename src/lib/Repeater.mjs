@@ -74,7 +74,7 @@ export class Repeater {
 		if (messageWithUpdatedVisitedList.target === this){
 			result.push( new Event('DONE',{source: qm, target: qm, link: qm.getLinkConnectedToThisQM()}, generateId(), messageWithUpdatedVisitedList) )
 			if (messageWithUpdatedVisitedList.type === 'ACK'){
-				this.sender.receive(messageWithUpdatedVisitedList)
+				this.sender.receiveACK(messageWithUpdatedVisitedList)
 				console.log('++++++++++++++++++++++++++++')
 			}
 			else {
@@ -86,16 +86,17 @@ export class Repeater {
 		else 
 			this.findLinksToEmitMessage(messageWithUpdatedVisitedList)
 			.forEach(link => {
-				switch (messageWithUpdatedVisitedList.type){
-					case 'String':
-						result.push(new Event('INTERNAL', { source: qm, target: link.getTargetQM(this), link: link}, generateId(), calculateLossP(messageWithUpdatedVisitedList)))
-						break
-					case 'Bit':
-						result.push(new Event('INTERNAL', { source: qm, target: link.getTargetQM(this), link: link}, generateId(), messageWithUpdatedVisitedList))
-						break
-					default:
-						break
-				}
+				result.push(new Event('INTERNAL', { source: qm, target: link.getTargetQM(this), link: link}, generateId(), messageWithUpdatedVisitedList))
+				// switch (messageWithUpdatedVisitedList.type){
+				// 	case 'String':
+				// 		result.push(new Event('INTERNAL', { source: qm, target: link.getTargetQM(this), link: link}, generateId(), calculateLossP(messageWithUpdatedVisitedList)))
+				// 		break
+				// 	case 'Bit':
+						
+				// 		break
+				// 	default:
+				// 		break
+				// }
 			})
 		
 		return result
