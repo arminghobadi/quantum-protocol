@@ -3,8 +3,15 @@ import {getRandomNumberWithProbability} from './actions'
 
 const P_LOSS_CHANCE_ = 3 // From 1 to 10
 const Q_LOSS_CHANCE_ = 3 // From 1 to 10
-const P_SUCCESS_RATE_ = 10 // 0-> all fail ; 10 -> all success
-const Q_SUCCESS_RATE_ = 10
+const P_SUCCESS_RATE_ = 6 // 0-> all fail ; 10 -> all success
+const Q_SUCCESS_RATE_ = 9
+
+/**
+ * For P = 6 and Q = 9 and a 4x4 grid of a network, usually one path is successfull, resulting around 30 cycles.
+ * The receiver usually receives the data around 2 or 3 times. Same thing with the sender.
+ * We have to optimize it. Meaning lets figure out for what P and Q and for what grid, there is a minimum number of ACK receiving by the sender
+ * ( I dont really know how else to explain what is in my head! I hope this is good enough! )
+ */
 
 export function convertStringToBinary(messageContent) {
   let res = ''
@@ -12,10 +19,6 @@ export function convertStringToBinary(messageContent) {
       res += messageContent[i].charCodeAt(0).toString(2)
   }
   return res
-}
-
-export function generateTimeStamp(){
-
 }
 
 export function generateId() {

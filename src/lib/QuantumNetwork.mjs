@@ -52,7 +52,7 @@ export class QuantumNetwork{
   }
   
   handleACK(message){
-    this.eventQueue = this.eventQueue.filter( event => event.getMessage().id !== message.id) // TODO: im not sure if its message.id or message.content
+    this.eventQueue = this.eventQueue.filter( event => event.getMessage().content !== message.content) // TODO: im not sure if its message.id or message.content
   }
 
   handleEvents(){

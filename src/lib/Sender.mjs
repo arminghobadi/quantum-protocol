@@ -1,5 +1,8 @@
 import { Receiver } from "./Receiver.mjs";
 import { logData } from './utils'
+import { logStat } from "./utils.mjs";
+import { convertStringToBinary } from "./utils.mjs";
+import { generateId } from "./utils.mjs";
 
 const TIMEOUT_ = 2000 /* 2 seconds */
 
@@ -10,9 +13,21 @@ export class Sender{
     this.message = message
     this.network = network
     this.receiver = new Receiver(receiver, network, this)
+    this.target = receiver
     this.sentMessages = []
     this.sender.setSender(this)
     this.sender.isSender = true
+    this.num = 0
+    this.messages = []
+  }
+
+  generateMessage(string){
+    const stb = convertStringToBinary(string)
+    //const message = { source: r10, target: r4, visited: [r10], content: 1, type:'Bit', id: generateId() }
+    for ( var i = 0 ; i < stb.length ; i++){
+      this.messages.push({ source: this.sender, target: this.target, visited: [this.sender], content: stb.charAt(i), type:'Bit', id:generateId() })
+    }
+    this.send(this.messages[0])
   }
 
   handleTimeout(message){
@@ -20,7 +35,7 @@ export class Sender{
     ? 
       this.send(message)
     : 
-      console.log(logData('ACK received already'))
+      console.log(logData(logStat('ACK received already')))
   }
 
   send(message){
@@ -37,6 +52,7 @@ export class Sender{
   }
 
   receiveACK(message){
+    logStat('%%%%sender' + ++this.num)
     const element = this.sentMessages.find(x => x.message.id === message.content)
     if (element){
       clearTimeout(element.timeout)
