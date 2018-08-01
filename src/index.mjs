@@ -64,8 +64,11 @@ for (var i = 0 ; i < 1/*stringToBinary.length*/ ; i++) {
 	const receiver = new Receiver(message.target, qn)
 	message.target.setReceiver(receiver)
 
-	new Sender({sender: message.source, network: qn, message, receiver: message.target}).generateMessage('armin') // send(message)?? get rid of this shit dude! 
+	const sender = new Sender({sender: message.source, network: qn, receiver: message.target, window: new Window() }).generateMessage('armin') // send(message)?? get rid of this shit dude! 
 	// if (!window.addWindowEvent(new Sender(r1, qn, message).send)){
 	// 	setTimeout(() => this, 1000 /* miliseconds */)
 	// }
+
+	// const window = new Window(sender)
+	// window.getNextPackage()
 } 

@@ -3,14 +3,14 @@ import { logData } from './utils'
 import { logStat } from "./utils.mjs";
 import { convertStringToBinary } from "./utils.mjs";
 import { generateId } from "./utils.mjs";
+import { logVis } from "./utils.mjs";
 
 const TIMEOUT_ = 2000 /* 2 seconds */
 
 export class Sender{
-  constructor({sender /* Repeater */, network /* QuantumNetwork */, message /* Object */, receiver /* Repeater */}){
+  constructor({sender /* Repeater */, network /* QuantumNetwork */, receiver /* Repeater */, window /* Window */}){
     // TODO: the message here shouldnt be an object. it should just be a string ( or whatever ) and then make the object here, then send it
     this.sender = sender
-    this.message = message
     this.network = network
     this.receiver = new Receiver(receiver, network, this)
     this.target = receiver
@@ -19,6 +19,8 @@ export class Sender{
     this.sender.isSender = true
     this.num = 0
     this.messages = []
+    this.window = window
+    this.sentPackets = 0
   }
 
   generateMessage(string){
@@ -27,8 +29,24 @@ export class Sender{
     for ( var i = 0 ; i < stb.length ; i++){
       this.messages.push({ source: this.sender, target: this.target, visited: [this.sender], content: stb.charAt(i), type:'Bit', id:generateId() })
     }
-    this.send(this.messages[0])
+
+    // for ( var i = 0 ; i < this.messages.length ; i++){
+    //   this.send(this.messages[i])
+    // }
+    //console.log(logVis(this.messages.length + " brrrrrrrrr")) length is 35
+
   }
+
+  sendNextPackage(){
+    const numberOfPackagesToSend = this.window.isReady()
+    for (this.sentPackets ; this.sentPackets < numberOfPackagesToSend+this.sentPackets ; this.sentPackets++){
+      this.window.addWindowEvent({func: this.send, message: this.messages[this.sentPackets]})
+    }
+  }
+
+  // getNextPackage(startingPackageNum, numberOfPackages){
+  //   return this.messages.slice(startingPackageNum, numberOfPackages+startingPackageNum)
+  // }
 
   handleTimeout(message){
     this.sentMessages.find( x => x.message.id === message.id ) 
@@ -51,6 +69,9 @@ export class Sender{
     //this.receiveACK(message)
   }
 
+
+  // when ack received, i should delete the approprieate windowEvent from windowEventQueue, then call the `sendNextPackage()`
+  // i should also increase the window size. also, when timeout happens, window should be aware of that
   receiveACK(message){
     logStat('%%%%sender' + ++this.num)
     const element = this.sentMessages.find(x => x.message.id === message.content)
