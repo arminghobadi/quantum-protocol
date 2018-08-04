@@ -7,6 +7,7 @@ export class Window{
     this.id = generateId()
     this.currentWindowSize = 0
     this.windowAllowance = 1
+    this.sender
   }
 
   /**
@@ -16,7 +17,15 @@ export class Window{
   isReady(){
     return 3
   }
-  
+
+  /**
+   * This function will get overriden by Sender class
+   */
+  readyForNextMessage(){}
+
+  setSender(sender){
+    this.sender = sender
+  }
 
   /**
    * @param windowEvent: A window event is basically a sender.send (function) on one bit, and a message
@@ -27,10 +36,10 @@ export class Window{
     return (this.windowQueue.length === this.MAX_WINDOW_SIZE_) ? false : this.windowQueue.push(windowEvent)
   }
   removeWindowEvent(message){
+    // I can use this.windowQueue.filter instead of reduce, but lets keep it like this as an example of reduce
     this.windowQueue = this.windowQueue.reduce(
       (arrWithoutThing, item) => arrWithoutThing.concat(item.message !== message ? [ item ] : [])
     , [])
-    this.windowQueue.find(x => x.message === message)
   }
 
   /**
@@ -48,10 +57,18 @@ export class Window{
   // }
 
   run(){
-    for (var i = 0 ; i < this.windowQueue.length ; i++){
-      if (this.windowQueue[i]()) {
-        this.windowQueue.splice(i, 1)
-      }
-    }
+    this.readyForNextMessage()
+  }
+
+  stop() {
+    console.log('window Stop')
+  }
+
+  messageDelivered(message) {
+    console.log('something')
+  }
+
+  messageLost() {
+
   }
 }

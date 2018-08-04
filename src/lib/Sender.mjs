@@ -9,18 +9,18 @@ const TIMEOUT_ = 2000 /* 2 seconds */
 
 export class Sender{
   constructor({sender /* Repeater */, network /* QuantumNetwork */, receiver /* Repeater */, window /* Window */}){
-    // TODO: the message here shouldnt be an object. it should just be a string ( or whatever ) and then make the object here, then send it
     this.sender = sender
     this.network = network
     this.receiver = new Receiver(receiver, network, this)
     this.target = receiver
     this.sentMessages = []
-    this.sender.setSender(this)
     this.sender.isSender = true
     this.num = 0
     this.messages = []
     this.window = window
     this.sentPackets = 0
+    this.sender.setSender(this) // These look like shit dude! WTF! fix it if you got the time
+    //this.window.setSender(this)
   }
 
   generateMessage(string){
@@ -29,6 +29,14 @@ export class Sender{
     for ( var i = 0 ; i < stb.length ; i++){
       this.messages.push({ source: this.sender, target: this.target, visited: [this.sender], content: stb.charAt(i), type:'Bit', id:generateId() })
     }
+
+    this.window.readyForNextMessage = () => {
+      const nextMsg = this.messages.pop()
+      
+      if (nextMsg && this.window.addWindowEvent(nextMsg) ) this.send(nextMsg)
+      else this.window.stop() // im not sure about this line!!
+    }
+    this.window.run()
 
     // for ( var i = 0 ; i < this.messages.length ; i++){
     //   this.send(this.messages[i])
@@ -74,6 +82,7 @@ export class Sender{
   // i should also increase the window size. also, when timeout happens, window should be aware of that
   receiveACK(message){
     logStat('%%%%sender' + ++this.num)
+    this.window.messageDelivered(message)
     const element = this.sentMessages.find(x => x.message.id === message.content)
     if (element){
       clearTimeout(element.timeout)
