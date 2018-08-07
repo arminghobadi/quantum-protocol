@@ -40,13 +40,13 @@ export class Sender{
 
   send(message){
     //console.log('here' + Date.now())
-    this.sentMessages.push({ 
-      message, 
-      timeout: 
-        setTimeout(() => {
-          this.handleTimeout(message)
-        }, TIMEOUT_) 
-    })
+    // this.sentMessages.push({ 
+    //   message, 
+    //   timeout: 
+    //     setTimeout(() => {
+    //       this.handleTimeout(message)
+    //     }, TIMEOUT_) 
+    // })
     this.network.run(message)
     //this.receiveACK(message)
   }
