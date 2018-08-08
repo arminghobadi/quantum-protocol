@@ -15,6 +15,7 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "cli:random": "node ./cli/makeRandomNetwork.command.js",
-    "cli:grid": "node ./cli/makeGridNetwork.command.js"
+    "cli:grid": "node ./cli/makeGridNetwork.command.js",
+    "cli:calculate": "node ./cli/calculateBitRateAndCost.command.js"
   }
 }

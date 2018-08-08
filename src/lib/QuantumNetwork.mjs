@@ -87,7 +87,7 @@ export class QuantumNetwork{
     if (pathLengths.length !== 0)
     {
       const numberOfSuccessfullPaths = this.successfullPaths.length
-      const totalNumberOfCycles = this.cycleCounter - 2
+      const totalNumberOfCycles = this.cycleCounter - 3
       const minPath = this.successfullPaths[0].split(' ').length - 2
       const numberOfCyclesForTheShortestPath = (minPath * 2) - 1 
       const numberOfUnnecessaryCycles = totalNumberOfCycles - numberOfCyclesForTheShortestPath
