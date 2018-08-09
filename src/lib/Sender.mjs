@@ -24,7 +24,9 @@ export class Sender{
     //this.window.setSender(this)
   }
 
-  
+  something(windowAllowance){
+    
+  }
 
   generateMessage(string){
     const stb = convertStringToBinary(string)
@@ -32,7 +34,7 @@ export class Sender{
     for ( var i = 0 ; i < stb.length ; i++){
       this.messages.push({ source: this.sender, target: this.target, visited: [this.sender], content: stb.charAt(i), type:'Bit', id:generateId() })
     }
-    this.sender.onReceivedACK = this.receiveACK
+    this.sender.onReceivedACK = (message) => this.receiveACK(message)
     this.window.readyForNextMessage = (windowAllowance) => {
       for (var i = 0 ; i < windowAllowance ; i++){
         const nextMsg = this.messages.pop()
