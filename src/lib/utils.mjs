@@ -3,8 +3,8 @@ import {getRandomNumberWithProbability} from './actions'
 
 const P_LOSS_CHANCE_ = 3 // From 1 to 10
 const Q_LOSS_CHANCE_ = 3 // From 1 to 10
-const P_SUCCESS_RATE_ = 6 // 0-> all fail ; 10 -> all success
-const Q_SUCCESS_RATE_ = 9
+const P_SUCCESS_RATE_ = 10//6 // 0-> all fail ; 10 -> all success
+const Q_SUCCESS_RATE_ = 10//9
 
 /**
  * For P = 6 and Q = 9 and a 4x4 grid of a network, usually one path is successfull, resulting around 30 cycles.

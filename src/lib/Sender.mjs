@@ -20,8 +20,11 @@ export class Sender{
     this.window = window
     this.sentPackets = 0
     this.sender.setSender(this) // These look like shit dude! WTF! fix it if you got the time
+    this.onFlightMessages = []
     //this.window.setSender(this)
   }
+
+  
 
   generateMessage(string){
     const stb = convertStringToBinary(string)
@@ -29,12 +32,16 @@ export class Sender{
     for ( var i = 0 ; i < stb.length ; i++){
       this.messages.push({ source: this.sender, target: this.target, visited: [this.sender], content: stb.charAt(i), type:'Bit', id:generateId() })
     }
-
-    this.window.readyForNextMessage = () => {
-      const nextMsg = this.messages.pop()
-      
-      if (nextMsg && this.window.addWindowEvent(nextMsg) ) this.send(nextMsg)
-      else this.window.stop() // im not sure about this line!!
+    this.sender.onReceivedACK = this.receiveACK
+    this.window.readyForNextMessage = (windowAllowance) => {
+      for (var i = 0 ; i < windowAllowance ; i++){
+        const nextMsg = this.messages.pop()
+        this.onFlightMessages.push(nextMsg)
+        // if (nextMsg) this.send(nextMsg)
+        // else this.window.stop() // im not sure about this line!!
+      }
+      if (this.onFlightMessages.length !== 0 ) this.onFlightMessages.forEach(msg => this.send(msg))
+      else this.window.stop()
     }
     this.window.run()
 
@@ -57,11 +64,14 @@ export class Sender{
   // }
 
   handleTimeout(message){
-    this.sentMessages.find( x => x.message.id === message.id ) 
-    ? 
+    if (!this.sentMessages.find( x => x.message.id === message.id ) && !this.onFlightMessages.find(x => x.id === message.content )) debugger
+    if (this.sentMessages.find( x => x.message.id === message.id )){
+      this.window.messageLost()
       this.send(message)
-    : 
+    } 
+    else {
       console.log(logData(logStat('ACK received already')))
+    } 
   }
 
   send(message){
@@ -82,11 +92,21 @@ export class Sender{
   // i should also increase the window size. also, when timeout happens, window should be aware of that
   receiveACK(message){
     logStat('%%%%sender' + ++this.num)
-    this.window.messageDelivered(message)
+    //this.window.messageDelivered()
     const element = this.sentMessages.find(x => x.message.id === message.content)
     if (element){
       clearTimeout(element.timeout)
     }
+    if (this.onFlightMessages.find(x => x.id === message.content )) debugger
+    if (this.onFlightMessages.length === 1){
+      this.onFlightMessages = this.onFlightMessages.filter(x => x.id !== message.content)
+      if (this.onFlightMessages.length === 0) this.window.messageDelivered()
+    }
+    else {
+      this.onFlightMessages = this.onFlightMessages.filter(x => x.id !== message.content)
+    }
+    
+
     this.network.handleACK(message)
     this.sentMessages.splice( 
       this.sentMessages.indexOf(

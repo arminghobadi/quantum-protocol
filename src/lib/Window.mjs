@@ -7,6 +7,7 @@ export class Window{
     this.id = generateId()
     this.currentWindowSize = 0
     this.windowAllowance = 1
+    this.windowPeakValue = 0
     this.sender
   }
 
@@ -57,18 +58,35 @@ export class Window{
   // }
 
   run(){
-    this.readyForNextMessage()
+    this.currentWindowSize = this.windowAllowance
+    this.readyForNextMessage(this.windowAllowance)
   }
 
   stop() {
     console.log('window Stop')
   }
 
-  messageDelivered(message) {
-    console.log('something')
+  messageDelivered() {
+    if (this.windowAllowance*2 >= this.MAX_WINDOW_SIZE_){
+      this.windowAllowance = this.MAX_WINDOW_SIZE_
+    }
+    else{
+      if (this.windowPeakValue === 0){
+        if (this.windowAllowance !== this.MAX_WINDOW_SIZE_) this.windowAllowance*=2
+      }
+      else {
+        if (this.windowAllowance < this.windowPeakValue) this.windowAllowance*=2
+        else this.windowAllowance++
+      }
+    }
+    this.readyForNextMessage(this.windowAllowance)
   }
 
   messageLost() {
-
+    if (this.windowPeakValue === 0){
+      return
+    }
+    this.windowPeakValue = this.windowAllowance
+    this.windowAllowance = this.windowPeakValue/2
   }
 }

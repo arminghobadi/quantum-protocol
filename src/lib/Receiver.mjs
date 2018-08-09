@@ -8,11 +8,12 @@ export class Receiver{
     this.receiver.setReceiver(this)
     this.receiver.isReceiver = true
     this.num = 0
+    this.receiver.onReceivedPackage = this.receive
   }
 
   receive(message){
-    this.sendACK({ source: message.target, target: message.source, visited: [this.receiver], content: message.id, type:'ACK', id: generateId() })
     logStat('%%%%receiver' + ++this.num)
+    this.sendACK({ source: message.target, target: message.source, visited: [this.receiver], content: message.id, type:'ACK', id: generateId() })
   }
 
   sendACK(message){

@@ -59,6 +59,13 @@ export class Repeater {
 		return links
 	}
 
+	/**	receivedACK(){}
+	 * these will be overriden by another class
+	 */
+	onReceivedPackage(msg){}
+	onReceivedACK(msg){}
+
+
 	receive(message /* Object */, qm /* QuantumMemory */) {
 		let result = []
 		const messageWithUpdatedVisitedList =
@@ -74,7 +81,8 @@ export class Repeater {
 		if (messageWithUpdatedVisitedList.target === this){
 			result.push( new Event('DONE',{source: qm, target: qm, link: qm.getLinkConnectedToThisQM()}, generateId(), messageWithUpdatedVisitedList) )
 			if (messageWithUpdatedVisitedList.type === 'ACK'){
-				this.sender.receiveACK(messageWithUpdatedVisitedList)
+				this.onReceivedACK(messageWithUpdatedVisitedList)
+				//this.sender.receiveACK(messageWithUpdatedVisitedList)
 				console.log('++++++++++++++++++++++++++++')
 			}
 			else {

@@ -114,10 +114,12 @@ export class QuantumNetwork{
     this.path = message
     console.log(logStat(`Path: ${message.visited.reduce((output, repeater) => output + repeater.name + ' ', '')}. Content received: '${message.content}'`))
     if (message.type === 'ACK'){
-      message.target.sender.receiveACK(message)
+      //message.target.sender.receiveACK(message)
+      message.target.onReceivedACK(message)
     }
     else {
-      message.target.receiver.receive(message)
+      //message.target.receiver.receive(message)
+      message.target.onReceivedPackage(message)
     }
     
   }
