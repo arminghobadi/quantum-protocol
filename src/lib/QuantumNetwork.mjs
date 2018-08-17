@@ -101,7 +101,7 @@ export class QuantumNetwork{
       const totalNumberOfCycles = this.cycleCounter - 2
       const numberOfCyclesForTheShortestPath = '-'
       const numberOfUnnecessaryCycles = totalNumberOfCycles
-      const bitRate = 1/totalNumberOfCycles
+      const bitRate = 0
       const cost = numberOfUnnecessaryCycles
       logGraph(`${numberOfSuccessfullPaths} ${numberOfCyclesForTheShortestPath} - ${numberOfUnnecessaryCycles} ${bitRate} ${cost}`)
     }
