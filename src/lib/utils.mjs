@@ -75,28 +75,28 @@ export function deadPath(message /* Object */, failurePoing /* Object */){
 }
 
 export function logData(data){
-  fs.appendFileSync('log.txt', `${data}\n`, 'utf8', (err) => {
-    if (err) console.log(err.message)
-  })
+  // fs.appendFileSync('log.txt', `${data}\n`, 'utf8', (err) => {
+  //   if (err) console.log(err.message)
+  // })
   return data
 }
 
 export function logStat(data){
-  fs.appendFileSync('stat.txt', `${data}\n`, 'utf8', (err) => {
-    if (err) console.log(err.message)
-  })
+  // fs.appendFileSync('stat.txt', `${data}\n`, 'utf8', (err) => {
+  //   if (err) console.log(err.message)
+  // })
   return data
 }
 
 export function logVis(data){
-  fs.appendFileSync('vis.txt', `${data}\n`, 'utf8', (err) => {
-    if (err) console.log(err.message)
-  })
+  // fs.appendFileSync('vis.txt', `${data}\n`, 'utf8', (err) => {
+  //   if (err) console.log(err.message)
+  // })
   return data
 }
 
 export function logGraph(data){
-  fs.appendFileSync('graph.txt', `${data}\n`, 'utf8', (err) => {
-    if (err) console.log(err.message)
-  })
+  // fs.appendFileSync('graph.txt', `${data}\n`, 'utf8', (err) => {
+  //   if (err) console.log(err.message)
+  // })
 }

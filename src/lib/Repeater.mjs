@@ -31,6 +31,10 @@ export class Repeater {
 		this.sender = sender
 	}
 
+	getName(){
+		return this.id
+	}
+
 	getId(){
 		return this.id
 	}
