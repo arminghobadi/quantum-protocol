@@ -515,32 +515,45 @@ var cy = cytoscape({
     },
   ],
 
-  style: [ // the stylesheet for the graph
-    {
-      selector: 'node',
-      style: {
-        'background-color': '#666',
-        'label': 'data(id)'
-      }
-    },
-
-    {
-      selector: 'edge',
-      style: {
-        'width': 3,
-        'line-color': '#ccc',
-        'target-arrow-color': '#ccc',
+  style: cytoscape.stylesheet()
+    .selector('node')
+      .css({
+        'content': 'data(id)'
+      })
+    .selector('edge')
+      .css({
+        
         'target-arrow-shape': 'triangle',
-        'label': 'data(id)'
-      }
-    }
-  ],
+        'width': 4,
+        'line-color': '#ddd',
+        'target-arrow-color': '#ddd'
+      })
+    .selector('.highlightEdge')
+      .css({
+        'curve-style': 'bezier',
+        'background-color': '#61bffc',
+        'line-color': '#61bffc',
+        'target-arrow-color': '#61bffc',
+        'transition-property': 'background-color, line-color, target-arrow-color',
+        'transition-duration': '0.5s'
+      })
+    .selector('.highlightNode')
+      .css({
+        'background-color': '#61bffc',
+        'transition-property': 'background-color',
+        'transition-duration': '0.5s'
+      }) ,
 
   layout: {
     name: 'grid',
     rows: 4
   }
 });
+//cy.getElementById(r1.getId()).addClass('highlighted')
+cy.getElementById(l1.getName()).addClass('highlightEdge')
+cy.getElementById(l2.getName()).addClass('highlightEdge')
+cy.getElementById(r1.getId()).addClass('highlightNode')
+
 // var eles = cy.add([
 //   { group: "edges", data: { id: l11.getId(), source: l11.getSource().getId(), target: l11.getTarget().getId() } }
 // ]);
