@@ -8,20 +8,17 @@ import { logVis } from "./utils.mjs";
 const TIMEOUT_ = 2000 /* 2 seconds */
 
 export class Sender{
-  constructor({sender /* Repeater */, network /* QuantumNetwork */, receiver /* Repeater */, window /* Window */}){
-    this.sender = sender
+  constructor({senderRepeater /* Repeater */, network /* QuantumNetwork */, receiverRepeater /* Repeater */, window /* Window */}){
+    this.senderRepeater = senderRepeater
     this.network = network
-    this.receiver = new Receiver(receiver, network, this)
-    this.target = receiver
+    this.receiverRepeater = new Receiver(receiverRepeater, network, this)
+    this.target = receiverRepeater
     this.sentMessages = []
-    this.sender.isSender = true
     this.num = 0
     this.messages = []
     this.window = window
     this.sentPackets = 0
-    this.sender.setSender(this) // These look like shit dude! WTF! fix it if you got the time
     this.onFlightMessages = []
-    //this.window.setSender(this)
   }
 
   something(windowAllowance){
@@ -32,9 +29,9 @@ export class Sender{
     const stb = convertStringToBinary(string)
     //const message = { source: r10, target: r4, visited: [r10], content: 1, type:'Bit', id: generateId() }
     for ( var i = 0 ; i < stb.length ; i++){
-      this.messages.push({ source: this.sender, target: this.target, visited: [this.sender], content: stb.charAt(i), type:'Bit', id:generateId() })
+      this.messages.push({ source: this.senderRepeater, target: this.target, visited: [this.senderRepeater], content: stb.charAt(i), type:'Bit', id:generateId() })
     }
-    this.sender.onReceivedACK = (message) => this.receiveACK(message)
+    this.senderRepeater.onReceivedACK = (message) => this.receiveACK(message)
     this.window.readyForNextMessage = (windowAllowance) => {
       for (var i = 0 ; i < windowAllowance ; i++){
         const nextMsg = this.messages.pop()
