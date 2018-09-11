@@ -1,6 +1,7 @@
 import { generateId, logData, logStat, logVis } from './utils'
 import { Event } from './Event'
 import { Receiver } from './Receiver.mjs';
+import { ticker } from './utils.mjs';
 
 export class QuantumNetwork{
 
@@ -29,6 +30,7 @@ export class QuantumNetwork{
         this.addEvent(new Event('EXTERNAL', {source: message.source, target: link.otherEnd(message.source), link: link}, generateId(), message))
       })
     this.cycle()
+    ticker().tick(()=>{this.handleEvents()})
   }
   
   cycle(){
@@ -79,7 +81,7 @@ export class QuantumNetwork{
           break
       }
     }
-    ( tempQueue.length !== 0 ) ? this.cycle() : this.onTerminate()
+    ( tempQueue.length !== 0 ) ? /*this.cycle()*/ ticker().tick(()=>this.handleEvents()) : this.onTerminate()
   }
 
   onTerminate() {

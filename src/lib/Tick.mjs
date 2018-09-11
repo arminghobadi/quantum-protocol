@@ -1,17 +1,18 @@
 
 export class Tick{
 
-  constructor(nextTick){
+  constructor(){
     this.tickHistory = []
-    this.nextTick = nextTick
     this.tickListeners = []
     this.tickListenerHistory = [] // dead listeners go here 
     this.counter = []
+    this.TCP_TIMEOUT_TICK_NUM_ = 50
   }
 
-  tick(){
-    this.tickHistory.push(this.nextTick)
-    this.nextTick()
+  tick(tickFunc){
+    this.tickHistory.push(tickFunc)
+    console.log(`doing tick # ${this.tickHistory.length}`)
+    tickFunc()
     this.tickListeners.forEach(
       (listener) =>
         --listener.tickNum === 0 ? this.execTickListener(listener) : ()=>{} // not sure --listener.tickNum or listener.tickNum--
@@ -20,12 +21,12 @@ export class Tick{
     this.counter = []
   }
 
-  setNextTick(tickFunc){
-    this.nextTick = tickFunc
-  }
-
   getTickNums(){
     return this.tickHistory.length
+  }
+
+  getTcpTimeoutTickNum(){
+    return this.TCP_TIMEOUT_TICK_NUM_
   }
 
   /**

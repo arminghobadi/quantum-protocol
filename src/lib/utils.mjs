@@ -6,10 +6,10 @@ const P_LOSS_CHANCE_ = 3 // From 1 to 10
 const Q_LOSS_CHANCE_ = 3 // From 1 to 10
 const P_SUCCESS_RATE_ = 6//6 // 0-> all fail ; 10 -> all success
 const Q_SUCCESS_RATE_ = 9//9
-const tickClass = new Tick(()=>{})
+const tickRef = new Tick()
 
-export function tick(){
-  return tickClass;
+export function ticker(){
+  return tickRef;
 }
 
 /**

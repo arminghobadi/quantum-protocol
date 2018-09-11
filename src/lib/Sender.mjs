@@ -2,9 +2,8 @@ import { Receiver } from "./Receiver.mjs";
 import { logData } from './utils'
 import { logStat } from "./utils.mjs";
 import { convertStringToBinary } from "./utils.mjs";
-import { generateId, tick } from "./utils.mjs";
+import { generateId, ticker } from "./utils.mjs";
 import { logVis } from "./utils.mjs";
-import { Tick } from "./Tick.mjs";
 
 const TIMEOUT_ = 2000 /* 2 seconds */
 
@@ -15,13 +14,10 @@ export class Sender{
     this.receiverRepeater = new Receiver(receiverRepeater, network, this)
     this.target = receiverRepeater
     this.sentMessages = []
-    this.num = 0
     this.messages = []
     this.window = window
     this.sentPackets = 0
     this.onFlightMessages = []
-    this.tick = new Tick(()=>{})
-    this.TICK_NUM_ = 50
   }
 
   something(windowAllowance){
@@ -80,7 +76,7 @@ export class Sender{
   send(message){
     this.sentMessages.push({
       message,
-      timeout: this.tick.setTickListener({ tickNum: this.TICK_NUM_, fun: () => this.handleTimeout(message) })
+      timeout: ticker().setTickListener({ tickNum: ticker().getTcpTimeoutTickNum(), fun: () => this.handleTimeout(message) })
     })
     this.sentMessages.push({ 
       message, 
@@ -97,7 +93,6 @@ export class Sender{
   // when ack received, i should delete the approprieate windowEvent from windowEventQueue, then call the `sendNextPackage()`
   // i should also increase the window size. also, when timeout happens, window should be aware of that
   receiveACK(message){
-    logStat('%%%%sender' + ++this.num)
     //this.window.messageDelivered()
     const element = this.sentMessages.find(x => x.message.id === message.content)
     if (element){
