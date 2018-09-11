@@ -42,4 +42,8 @@ export class Tick{
     listener.fun()
   }
 
+  removeTickListener(listener){
+    return this.tickListeners.splice(this.tickListeners.indexOf(listener), 1)
+  }
+
 }

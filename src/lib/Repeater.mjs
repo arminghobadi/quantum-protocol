@@ -23,14 +23,6 @@ export class Repeater {
 		return this === obj ? true : false
 	}
 
-	setReceiver(receiver){
-		this.receiver = receiver
-	}
-
-	setSender(sender){
-		this.sender = sender
-	}
-
 	getId(){
 		return this.id
 	}

@@ -2,8 +2,9 @@ import { Receiver } from "./Receiver.mjs";
 import { logData } from './utils'
 import { logStat } from "./utils.mjs";
 import { convertStringToBinary } from "./utils.mjs";
-import { generateId } from "./utils.mjs";
+import { generateId, tick } from "./utils.mjs";
 import { logVis } from "./utils.mjs";
+import { Tick } from "./Tick.mjs";
 
 const TIMEOUT_ = 2000 /* 2 seconds */
 
@@ -19,6 +20,8 @@ export class Sender{
     this.window = window
     this.sentPackets = 0
     this.onFlightMessages = []
+    this.tick = new Tick(()=>{})
+    this.TICK_NUM_ = 50
   }
 
   something(windowAllowance){
@@ -39,7 +42,8 @@ export class Sender{
         // if (nextMsg) this.send(nextMsg)
         // else this.window.stop() // im not sure about this line!!
       }
-      if (this.onFlightMessages.length !== 0 ) this.onFlightMessages.forEach(msg => this.send(msg))
+      if (this.onFlightMessages.length !== 0 ) 
+        this.onFlightMessages.forEach(msg => this.send(msg))
       else this.window.stop()
     }
     this.window.run()
@@ -70,11 +74,14 @@ export class Sender{
     } 
     else {
       console.log(logData(logStat('ACK received already')))
-    } 
+    }
   }
 
   send(message){
-    //console.log('here' + Date.now())
+    this.sentMessages.push({
+      message,
+      timeout: this.tick.setTickListener({ tickNum: this.TICK_NUM_, fun: () => this.handleTimeout(message) })
+    })
     this.sentMessages.push({ 
       message, 
       timeout: 

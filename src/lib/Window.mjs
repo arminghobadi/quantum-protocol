@@ -23,11 +23,7 @@ export class Window{
    * This function will get overriden by Sender class
    */
   readyForNextMessage(){}
-
-  setSender(sender){
-    this.sender = sender
-  }
-
+  
   /**
    * @param windowEvent: A window event is basically a sender.send (function) on one bit, and a message
    * @returns false -> if MAX_WINDOW_SIZE has reached
@@ -43,27 +39,13 @@ export class Window{
     , [])
   }
 
-  /**
-   * So, right now my window pulls packages from the sender.
-   * I dont know if the window should pull packages from sender, or sender should just push them to the window.
-   * ( pushing makes more sense I guess? Im not sure :( )
-   */
-  // getNextPackage(){
-  //   const packagesToSend = this.sender.getNextPackage(0,1)
-  //   if (packagesToSend.length > 0){
-  //     packagesToSend.forEach(element => {
-  //       element.func(element.message)
-  //     })
-  //   }
-  // }
-
   run(){
     this.currentWindowSize = this.windowAllowance
     this.readyForNextMessage(this.windowAllowance)
   }
 
   stop() {
-    console.log('window Stop')
+    console.log('window Stopped')
   }
 
   messageDelivered() {

@@ -5,8 +5,6 @@ export class Receiver{
   constructor(receiver /* Repeater */, network /* QuantumNetwork */){
     this.receiver = receiver
     this.network = network
-    this.receiver.setReceiver(this)
-    this.receiver.isReceiver = true
     this.num = 0
     this.receiver.onReceivedPackage = (message) => this.receive(message)
   }
