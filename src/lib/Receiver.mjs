@@ -12,7 +12,7 @@ export class Receiver{
   receive(message){
     logStat('%%%%receiver' + ++this.num)
     //this.network.run(message)
-    this.sendACK({ source: message.target, target: message.source, visited: [this.receiver], content: message.id, type:'ACK', id: generateId() })
+    this.sendACK({ source: message.target, target: message.source, visited: [this.receiver], content: message.id, type:'ACK', id: generateId(), packetNumber: message.packetNumber })
   }
 
   sendACK(message){

@@ -25,20 +25,22 @@ export class QuantumNetwork{
 
   run(message){
     //console.log(this.repeaters[0].getId())
+    if (message === undefined) debugger
     message.source.findLinksToEmitMessage(message)
       .forEach(link => {
         this.addEvent(new Event('EXTERNAL', {source: message.source, target: link.otherEnd(message.source), link: link}, generateId(), message))
       })
-    this.cycle()
-    ticker().tick(()=>{this.handleEvents()})
+    //this.cycle()
+    //ticker().setTickFunc(()=>this.handleEvents())
+    ticker().tick()
   }
   
-  cycle(){
-    console.log(logData(`Cycle ${this.cycleCounter} done`))
-    ++this.cycleCounter
-    //setTimeout(() => this.handleEvents(), 1000 /* miliseconds */)
-    this.handleEvents()
-  }
+  // cycle(){
+  //   console.log(logData(`Cycle ${this.cycleCounter} done`))
+  //   ++this.cycleCounter
+  //   //setTimeout(() => this.handleEvents(), 1000 /* miliseconds */)
+  //   this.handleEvents()
+  // }
   
   handleInternal(event){
     this.addEvent(event.getAction().source.sendToReceivingQM(event.getAction().target, event.getMessage(), event.getAction().link))
@@ -81,7 +83,20 @@ export class QuantumNetwork{
           break
       }
     }
-    ( tempQueue.length !== 0 ) ? /*this.cycle()*/ ticker().tick(()=>this.handleEvents()) : this.onTerminate()
+    if (tempQueue.length !== 0){
+      /*this.cycle()*/ ticker().tick()
+    }
+    else if ( ticker().getTerminate() ){
+      this.onTerminate()
+    }
+    else{
+      if (ticker().tickListeners.length !== 0)
+        ticker().tick()
+    }
+    // ( tempQueue.length !== 0 ) ? 
+    //   /*this.cycle()*/ ticker().tick( () => this.handleEvents() ) 
+    // : 
+    //   ticker().getTerminate() ? this.onTerminate() : ticker().tick(()=>{})
   }
 
   onTerminate() {
@@ -114,7 +129,9 @@ export class QuantumNetwork{
     
     const message = event.getMessage()
     this.path = message
-    console.log(logStat(`Path: ${message.visited.reduce((output, repeater) => output + repeater.name + ' ', '')}. Content received: '${message.content}'`))
+    console.log(logStat(`^^^^^^Path: ${message.visited.reduce((output, repeater) => output + repeater.name + ' ', '')}. Content received: '${message.content}'`))
+    //console.log(`^^^^^^packetNum: ${message.packetNumber}`)
+    console.log(logVis(`^^^^^^packetNum: ${message.packetNumber}`))
     if (message.type === 'ACK'){
       //message.target.sender.receiveACK(message)
       message.target.onReceivedACK(message)

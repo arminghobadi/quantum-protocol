@@ -5,10 +5,8 @@ import { convertStringToBinary } from "./utils.mjs";
 import { generateId, ticker } from "./utils.mjs";
 import { logVis } from "./utils.mjs";
 
-const TIMEOUT_ = 2000 /* 2 seconds */
-
 export class Sender{
-  constructor({senderRepeater /* Repeater */, network /* QuantumNetwork */, receiverRepeater /* Repeater */, window /* Window */}){
+  constructor({ senderRepeater /* Repeater */, network /* QuantumNetwork */, receiverRepeater /* Repeater */, window /* Window */ }){
     this.senderRepeater = senderRepeater
     this.network = network
     this.receiverRepeater = new Receiver(receiverRepeater, network, this)
@@ -18,17 +16,14 @@ export class Sender{
     this.window = window
     this.sentPackets = 0
     this.onFlightMessages = []
-  }
-
-  something(windowAllowance){
-    
+    ticker().setTickFunc(() => this.network.handleEvents())
   }
 
   generateMessage(string){
     const stb = convertStringToBinary(string)
     //const message = { source: r10, target: r4, visited: [r10], content: 1, type:'Bit', id: generateId() }
     for ( var i = 0 ; i < stb.length ; i++){
-      this.messages.push({ source: this.senderRepeater, target: this.target, visited: [this.senderRepeater], content: stb.charAt(i), type:'Bit', id:generateId() })
+      this.messages.push({ source: this.senderRepeater, target: this.target, visited: [this.senderRepeater], content: stb.charAt(i), type:'Bit', id:generateId(), packetNumber: this.messages.length})
     }
     this.senderRepeater.onReceivedACK = (message) => this.receiveACK(message)
     this.window.readyForNextMessage = (windowAllowance) => {
@@ -40,7 +35,10 @@ export class Sender{
       }
       if (this.onFlightMessages.length !== 0 ) 
         this.onFlightMessages.forEach(msg => this.send(msg))
-      else this.window.stop()
+      else {
+        ticker().setTerminate(true)
+        this.window.stop()
+      }
     }
     this.window.run()
 
@@ -76,15 +74,15 @@ export class Sender{
   send(message){
     this.sentMessages.push({
       message,
-      timeout: ticker().setTickListener({ tickNum: ticker().getTcpTimeoutTickNum(), fun: () => this.handleTimeout(message) })
+      timeout: ticker().setTickListener({ tickNum: ticker().getTcpTimeoutTickNum(), fun: () => this.handleTimeout(message), id: generateId() })
     })
-    this.sentMessages.push({ 
-      message, 
-      timeout: 
-        setTimeout(() => {
-          this.handleTimeout(message)
-        }, TIMEOUT_) 
-    })
+    // this.sentMessages.push({ 
+    //   message, 
+    //   timeout: 
+    //     setTimeout(() => {
+    //       this.handleTimeout(message)
+    //     }, TIMEOUT_) 
+    // })
     this.network.run(message)
     //this.receiveACK(message)
   }
@@ -95,10 +93,7 @@ export class Sender{
   receiveACK(message){
     //this.window.messageDelivered()
     const element = this.sentMessages.find(x => x.message.id === message.content)
-    if (element){
-      clearTimeout(element.timeout)
-    }
-    if (this.onFlightMessages.find(x => x.id === message.content )) debugger
+    //if (this.onFlightMessages.find(x => x.id === message.content )) debugger
     if (this.onFlightMessages.length === 1){
       this.onFlightMessages = this.onFlightMessages.filter(x => x.id !== message.content)
       if (this.onFlightMessages.length === 0) this.window.messageDelivered()
@@ -107,15 +102,15 @@ export class Sender{
       this.onFlightMessages = this.onFlightMessages.filter(x => x.id !== message.content)
     }
     
-
+    var listenerToBeRemoved = this.sentMessages.indexOf(element)
+    if (element)
+    {
+      ticker().removeTickListener(element.timeout)
+      this.sentMessages.splice( 
+        listenerToBeRemoved
+      ,1 )
+    }
     this.network.handleACK(message)
-    this.sentMessages.splice( 
-      this.sentMessages.indexOf(
-        this.sentMessages.find( 
-          x => x.message.id === message.id 
-        ))
-    ,1 )
-    
   }
   
 } 

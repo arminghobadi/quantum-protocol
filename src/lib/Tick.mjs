@@ -1,3 +1,4 @@
+import { logData } from "./utils.mjs";
 
 export class Tick{
 
@@ -6,23 +7,43 @@ export class Tick{
     this.tickListeners = []
     this.tickListenerHistory = [] // dead listeners go here 
     this.counter = []
+    this.terminate = false
     this.TCP_TIMEOUT_TICK_NUM_ = 50
+    this.tickFunc = ()=>{}
   }
 
-  tick(tickFunc){
-    this.tickHistory.push(tickFunc)
-    console.log(`doing tick # ${this.tickHistory.length}`)
-    tickFunc()
+  /**
+   * 
+   * @param tickFunc: this param will get its first value when constructing Sender class
+   */
+  setTickFunc(tickFunc){
+    this.tickFunc = tickFunc
+  }
+
+  tick(){
+    this.tickHistory.push(this.tickFunc)
+    console.log(logData(`- Doing tick # ${this.tickHistory.length}`))
     this.tickListeners.forEach(
       (listener) =>
         --listener.tickNum === 0 ? this.execTickListener(listener) : ()=>{} // not sure --listener.tickNum or listener.tickNum--
       )
     this.counter.forEach( () => this.tickListeners.pop() )
     this.counter = []
+    this.tickFunc()
   }
+
+  
 
   getTickNums(){
     return this.tickHistory.length
+  }
+
+  getTerminate(){
+    return this.terminate
+  }
+
+  setTerminate(val){
+    this.terminate = val
   }
 
   getTcpTimeoutTickNum(){
@@ -35,6 +56,7 @@ export class Tick{
   setTickListener(listener){
     this.tickListeners.push(listener)
     this.tickListeners.sort((el, nextEl) => nextEl.tickNum - el.tickNum)
+    return listener
   }
 
   execTickListener(listener){

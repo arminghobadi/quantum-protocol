@@ -12,14 +12,6 @@ export class Window{
   }
 
   /**
-   * @returns false -> if MAX_WINDOW_SIZE has reached
-   * @returns int -> number of packets its ready to receive
-   */
-  isReady(){
-    return 3
-  }
-
-  /**
    * This function will get overriden by Sender class
    */
   readyForNextMessage(){}
