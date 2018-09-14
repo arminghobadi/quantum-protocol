@@ -28,13 +28,13 @@ export class Sender{
     this.senderRepeater.onReceivedACK = (message) => this.receiveACK(message)
     this.window.readyForNextMessage = (windowAllowance) => {
       for (var i = 0 ; i < windowAllowance ; i++){
-        const nextMsg = this.messages.pop()
-        this.onFlightMessages.push(nextMsg)
-        // if (nextMsg) this.send(nextMsg)
-        // else this.window.stop() // im not sure about this line!!
+        this.messages.length ? this.onFlightMessages.push(this.messages.pop()) : ()=>{}
       }
       if (this.onFlightMessages.length !== 0 ) 
-        this.onFlightMessages.forEach(msg => this.send(msg))
+        // for (var i = 0 ; i < this.onFlightMessages.length ; i++){
+        //   this.send(this.onFlightMessages[i])
+        // }
+        this.onFlightMessages.forEach(msg => {msg.packetNumber ? (()=>{/*debugger;*/ this.send(msg)})() : this.send(msg)}) //TODO: fix this mf
       else {
         ticker().setTerminate(true)
         this.window.stop()

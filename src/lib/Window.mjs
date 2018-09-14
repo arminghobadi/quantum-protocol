@@ -8,7 +8,6 @@ export class Window{
     this.currentWindowSize = 0
     this.windowAllowance = 1
     this.windowPeakValue = 0
-    this.sender
   }
 
   /**
