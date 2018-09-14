@@ -2,6 +2,7 @@ import { generateId, logData, logStat, logVis } from './utils'
 import { Event } from './Event'
 import { Receiver } from './Receiver.mjs';
 import { ticker } from './utils.mjs';
+import { logGraph } from './utils.mjs';
 
 export class QuantumNetwork{
 
@@ -99,20 +100,45 @@ export class QuantumNetwork{
     //   ticker().getTerminate() ? this.onTerminate() : ticker().tick(()=>{})
   }
 
+  logGraph(pathLengths){
+    if (pathLengths.length !== 0)
+    {
+      const numberOfSuccessfullPaths = this.successfullPaths.length
+      const totalNumberOfCycles = this.cycleCounter - 3
+      const minPath = this.successfullPaths[0].split(' ').length - 2
+      const numberOfCyclesForTheShortestPath = (minPath * 2) - 1 
+      const numberOfUnnecessaryCycles = totalNumberOfCycles - numberOfCyclesForTheShortestPath
+      const bitRate = 1/numberOfCyclesForTheShortestPath
+      const cost = numberOfUnnecessaryCycles
+      const paths = pathLengths.replace(/ /g , "-");
+      logGraph(`${numberOfSuccessfullPaths} ${numberOfCyclesForTheShortestPath} ${paths.substring(0,paths.length - 1)} ${numberOfUnnecessaryCycles} ${bitRate} ${cost} `)
+    }
+    else {
+      const numberOfSuccessfullPaths = 0
+      const totalNumberOfCycles = this.cycleCounter - 2
+      const numberOfCyclesForTheShortestPath = '-'
+      const numberOfUnnecessaryCycles = totalNumberOfCycles
+      const bitRate = 0
+      const cost = numberOfUnnecessaryCycles
+      logGraph(`${numberOfSuccessfullPaths} ${numberOfCyclesForTheShortestPath} - ${numberOfUnnecessaryCycles} ${bitRate} ${cost}`)
+    }
+  }
+
   onTerminate() {
     console.log(logData(`--------------`))
     logStat(`--------------`)
     const numberOfSuccessfullPaths = this.successfullPaths.length
-    let pathLenghts = ''
+    let pathLengths = ''
     if (numberOfSuccessfullPaths > 0){
       //this.sendAck()
     }
     for ( var i = 0 ; i < numberOfSuccessfullPaths ; i++ ) {
-      pathLenghts += this.successfullPaths[i].split(' ').length - 2 + ' '
+      pathLengths += this.successfullPaths[i].split(' ').length - 2 + ' '
     }
     //this.path.target.receiver.receive(this.path)
-    console.log(logVis(`${numberOfSuccessfullPaths} ${pathLenghts} `))
+    console.log(logVis(`${numberOfSuccessfullPaths} ${pathLengths} `))
     //console.log(logVis(`${pathLenghts} `))
+    this.logGraph(pathLengths)
   }
 
   handleDead(event){

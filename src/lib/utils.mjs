@@ -101,3 +101,9 @@ export function logVis(data){
   // })
   return data
 }
+
+export function logGraph(data){
+  // fs.appendFileSync('graph.txt', `${data}\n`, 'utf8', (err) => {
+  //   if (err) console.log(err.message)
+  // })
+}

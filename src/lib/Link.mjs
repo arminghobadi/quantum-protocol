@@ -34,6 +34,9 @@ export class Link {
 	getId(){
 		return this.id
 	}
+	getName(){
+		return `l${this.id}`
+	}
 	getSourceQM(repeater){
 		if (repeater === this.end1) return this.targetQM
 		else if (repeater === this.end2) return this.sourceQM
@@ -48,5 +51,11 @@ export class Link {
 		if (repeater === this.end1) return this.end2
 		else if (repeater === this.end2) return this.end1
 		else throw new Error('something went wrong in otherEnd in Link class')
+	}
+	getSource(){
+		return this.end1
+	}
+	getTarget(){
+		return this.end2
 	}
 }
