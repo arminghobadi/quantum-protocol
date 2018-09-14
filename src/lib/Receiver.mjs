@@ -17,7 +17,7 @@ export class Receiver{
 
   sendACK(message){
     // this.receiver.setSender()??
-    //this.network.run(message)
+    this.network.run(message)
   }
 
 }
