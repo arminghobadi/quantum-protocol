@@ -5,7 +5,12 @@ import { generateId } from './lib/utils.mjs';
 import { Receiver } from './lib/Receiver.mjs';
 import React from 'react'
 import ReactDOM from 'react-dom'
+
+//import { combineReducers, createStore, compose } from 'redux'
+//import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { App } from './App'
 const numberOfTimesRunningTheProgram = 1
+
 
 //Random Graph 1 -> 16:3-6,6-13,7-9,10-12,9-11,2-11,4-10,5-14,10-14,11-15,8-12,5-10,7-12,10-13,2-8,9-13,5-13,1-2,0-10,10-11,5-6,1-6,3-7,1-15,7-10,4-11,2-7,4-14
 
@@ -148,7 +153,6 @@ const l24 = new Link(r12, r16, r12.getQM(3), r16.getQM(1), 24)
 
 const stringToBinary = convertStringToBinary("armin")
 console.log(stringToBinary.length)
-const window = new Window()
 const repeaters = [r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, r16]
 const links = [l1, l2, l3, l4, l5, l6, l7, l8, l9, l10, l11, l12, l13, l14, l15, l16, l17, l18, l19, l20, l21, l22, l23, l24/*, l25, l26, l27, l28*/]
 for (var i = 0 ; i < 1/*stringToBinary.length*/ ; i++) {
@@ -162,7 +166,7 @@ for (var i = 0 ; i < 1/*stringToBinary.length*/ ; i++) {
 	//const receiver = new Receiver(message.target, qn)
 	
 
-	const sender = new Sender({senderRepeater: message.source, network: qn, receiverRepeater: message.target, window: new Window() }).generateMessage('armin') // send(message)?? get rid of this shit dude! 
+	const sender = new Sender({senderRepeater: message.source, network: qn, receiverRepeater: message.target, window: new Window() }).generateMessage('a') // send(message)?? get rid of this shit dude! 
 	// if (!window.addWindowEvent(new Sender(r1, qn, message).send)){
 	// 	setTimeout(() => this, 1000 /* miliseconds */)
 	// }
@@ -383,191 +387,15 @@ for (var i = 0 ; i < 1/*stringToBinary.length*/ ; i++) {
 // 	// }
 // } 
 
-var cytoscape = require('cytoscape');
-
-var container =  document.getElementById('root')
-container.style.height = '100vh'
-
-var cy = cytoscape({
-  
-  container, // container to render in
-
-  elements: [ // list of graph elements to start with
-    { // node a
-      data: { id: r1.getName() }
-    },
-    { // node b
-      data: { id: r2.getName()  }
-    },
-    { // node a
-      data: { id: r3.getName()  }
-    },
-    { // node b
-      data: { id: r4.getName()  }
-    },
-    { // node a
-      data: { id: r5.getName() }
-    },
-    { // node b
-      data: { id: r6.getName() }
-    },
-    { // node a
-      data: { id: r7.getName() }
-    },
-    { // node b
-      data: { id: r8.getName() }
-    },
-    { // node a
-      data: { id: r9.getName() }
-    },
-    { // node b
-      data: { id: r10.getName() }
-    },
-    { // node a
-      data: { id: r11.getName() }
-    },
-    { // node b
-      data: { id: r12.getName() }
-    },
-    { // node a
-      data: { id: r13.getName() }
-    },
-    { // node b
-      data: { id: r14.getName() }
-    },
-    { // node a
-      data: { id: r15.getName() }
-    },
-    { // node b
-      data: { id: r16.getName() }
-    },
-    { // edge ab
-      data: { id: l1.getName() , source: l1.getSource().getId(), target: l1.getTarget().getId() }
-    },
-    { // edge ab
-      data: { id: l2.getName() , source: l2.getSource().getId(), target: l2.getTarget().getId() }
-    },
-    { // edge ab
-      data: { id: l3.getName() , source: l3.getSource().getId(), target: l3.getTarget().getId() }
-    },
-    { // edge ab
-      data: { id: l4.getName() , source: l4.getSource().getId(), target: l4.getTarget().getId() }
-    },
-    { // edge ab
-      data: { id: l5.getName() , source: l5.getSource().getId(), target: l5.getTarget().getId() }
-    },
-    { // edge ab
-      data: { id: l6.getName() , source: l6.getSource().getId(), target: l6.getTarget().getId() }
-    },
-    { // edge ab
-      data: { id: l7.getName() , source: l7.getSource().getId(), target: l7.getTarget().getId() }
-    },
-    { // edge ab
-      data: { id: l8.getName(), source: l8.getSource().getId(), target: l8.getTarget().getId() }
-    },
-    { // edge ab
-      data: { id: l9.getName(), source: l9.getSource().getId(), target: l9.getTarget().getId() }
-    },
-    { // edge ab
-      data: { id: l10.getName(), source: l10.getSource().getId(), target: l10.getTarget().getId() }
-    },
-    { // edge ab
-      data: { id: l11.getName(), source: l11.getSource().getId(), target: l11.getTarget().getId() }
-    },
-    { // edge ab
-      data: { id: l12.getName(), source: l12.getSource().getId(), target: l12.getTarget().getId() }
-    },
-    { // edge ab
-      data: { id: l13.getName(), source: l13.getSource().getId(), target: l13.getTarget().getId() }
-    },
-    { // edge ab
-      data: { id: l14.getName(), source: l14.getSource().getId(), target: l14.getTarget().getId() }
-    },
-    { // edge ab
-      data: { id: l15.getName(), source: l15.getSource().getId(), target: l15.getTarget().getId() }
-    },
-    { // edge ab
-      data: { id: l16.getName(), source: l16.getSource().getId(), target: l16.getTarget().getId() }
-    },
-    { // edge ab
-      data: { id: l17.getName(), source: l17.getSource().getId(), target: l17.getTarget().getId() }
-    },
-    { // edge ab
-      data: { id: l18.getName(), source: l18.getSource().getId(), target: l18.getTarget().getId() }
-    },
-    { // edge ab
-      data: { id: l19.getName(), source: l19.getSource().getId(), target: l19.getTarget().getId() }
-    },
-    { // edge ab
-      data: { id: l20.getName(), source: l20.getSource().getId(), target: l20.getTarget().getId() }
-    },
-    { // edge ab
-      data: { id: l21.getName(), source: l21.getSource().getId(), target: l21.getTarget().getId() }
-    },
-    { // edge ab
-      data: { id: l22.getName(), source: l22.getSource().getId(), target: l22.getTarget().getId() }
-    },
-    { // edge ab
-      data: { id: l23.getName(), source: l23.getSource().getId(), target: l23.getTarget().getId() }
-    },
-    { // edge ab
-      data: { id: l24.getName(), source: l24.getSource().getId(), target: l24.getTarget().getId() }
-    },
-  ],
-
-  style: cytoscape.stylesheet()
-    .selector('node')
-      .css({
-        'content': 'data(id)'
-      })
-    .selector('edge')
-      .css({
-        
-        'target-arrow-shape': 'triangle',
-        'width': 4,
-        'line-color': '#ddd',
-        'target-arrow-color': '#ddd'
-      })
-    .selector('.highlightEdge')
-      .css({
-        'curve-style': 'bezier',
-        'background-color': '#61bffc',
-        'line-color': '#61bffc',
-        'target-arrow-color': '#61bffc',
-        'transition-property': 'background-color, line-color, target-arrow-color',
-        'transition-duration': '0.5s'
-      })
-    .selector('.highlightNode')
-      .css({
-        'background-color': '#61bffc',
-        'transition-property': 'background-color',
-        'transition-duration': '0.5s'
-      }) ,
-
-  layout: {
-    name: 'grid',
-    rows: 4
-  }
-});
-//cy.getElementById(r1.getId()).addClass('highlighted')
-cy.getElementById(l1.getName()).addClass('highlightEdge')
-cy.getElementById(l2.getName()).addClass('highlightEdge')
-cy.getElementById(r1.getId()).addClass('highlightNode')
-
-// var eles = cy.add([
-//   { group: "edges", data: { id: l11.getId(), source: l11.getSource().getId(), target: l11.getTarget().getId() } }
-// ]);
-// cy.forceRender()
-//repeaters.forEach(repeater => cy.add([{ group: "nodes", data: { id: repeater.getId() } }]))
-//links.forEach(link => cy.add([{ group: "edges", data: { id: link.getName(), source: link.getSource().getId(), target: link.getTarget().getId() } }]))
+/////
+// to paste all the cytoscape shit, paste it between these //
+/////
 
 
-
-// ReactDOM.render(
-//   <Provider store={store}>
-//     <Router>
-//       <App/>
-//     </Router>
-//   </Provider>,
-//   document.getElementById('root')
-// )
+ReactDOM.render(
+  <div>
+    armin
+    <App/>
+  </div>,
+  document.getElementById('root')
+)

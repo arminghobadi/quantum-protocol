@@ -35,7 +35,7 @@ export class QuantumMemory {
 
 	sendToReceivingQM(target /* QuantumMemory */, message /* Object */, linkToSendData /* Link */){
 		if (QSuccessRate()){
-			console.log(logData(`A message with content '${message.content}' was received and is being sent to ${target.getId()} through link ${linkToSendData.getId()}`))
+			logData(`A message with content '${message.content}' was received and is being sent to ${target.getId()} through link ${linkToSendData.getId()}`)
 			return target.receiveDataFromQM(message, linkToSendData)
 		}
 		else {
@@ -49,13 +49,13 @@ export class QuantumMemory {
 		// 		if (message === ''){
 		// 			// TODO: Is this a deadPath?
 		// 		} else {
-		// 			console.log(logData(`A message with content '${message.content}' was received and is being sent to ${target.getId()} through link ${linkToSendData.getId()}`))
+		// 			logData(`A message with content '${message.content}' was received and is being sent to ${target.getId()} through link ${linkToSendData.getId()}`)
 		// 			return target.receiveDataFromQM(calculateLossQ(message), linkToSendData)
 		// 		}
 		// 		break
 		// 	case 'Bit':
 		// 		if (QSuccessRate()){
-		// 			console.log(logData(`A message with content '${message.content}' was received and is being sent to ${target.getId()} through link ${linkToSendData.getId()}`))
+		// 			logData(`A message with content '${message.content}' was received and is being sent to ${target.getId()} through link ${linkToSendData.getId()}`)
 		// 			return target.receiveDataFromQM(message, linkToSendData)
 		// 		}
 		// 		else {
@@ -71,7 +71,7 @@ export class QuantumMemory {
 	}
 
 	receiveDataFromQM(message /* Object */, linkToSendData /* Link */){
-		console.log(logData(`Message received. Content: '${message.content}'`))
+		logData(`Message received. Content: '${message.content}'`)
 		const event = new Event('EXTERNAL', { source: this.repeater, target: linkToSendData.otherEnd(this.repeater), link: linkToSendData }, generateId(), message )
 		//QN.addEvent(event)
 		return event

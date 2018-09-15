@@ -23,6 +23,10 @@ export class Repeater {
 		return this === obj ? true : false
 	}
 
+	getName(){
+		return this.id
+	}
+
 	getId(){
 		return this.id
 	}
@@ -67,19 +71,17 @@ export class Repeater {
 				{ visited: message.visited.concat([this]) }
 			)
 		
-		console.log(logData(`${this.name} received: '${messageWithUpdatedVisitedList.content}'
-			This repeater has already visited ` + messageWithUpdatedVisitedList.visited.reduce((output, repeater) => output + repeater.name + ' ', '')))
+		logData(`${this.name} received: '${messageWithUpdatedVisitedList.content}'
+			This repeater has already visited ` + messageWithUpdatedVisitedList.visited.reduce((output, repeater) => output + repeater.name + ' ', ''))
 		
 		if (messageWithUpdatedVisitedList.target === this){
 			result.push( new Event('DONE',{source: qm, target: qm, link: qm.getLinkConnectedToThisQM()}, generateId(), messageWithUpdatedVisitedList) )
 			if (messageWithUpdatedVisitedList.type === 'ACK'){
 				this.onReceivedACK(messageWithUpdatedVisitedList)
 				//this.sender.receiveACK(messageWithUpdatedVisitedList)
-				console.log('++++++++++++++++++++++++++++')
 			}
 			else {
 				//this.receiver.receive(messageWithUpdatedVisitedList)
-				console.log('----------------------------')
 			}
 				
 		}

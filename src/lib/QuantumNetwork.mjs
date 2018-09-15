@@ -16,7 +16,7 @@ export class QuantumNetwork{
   }
 
   addEvent(event /* Event */){
-      console.log(logData(`## type: ${event.getEventType()} source: ${event.getAction().source.getId()}, target: ${event.getAction().target.getId()}`))
+      logData(`## type: ${event.getEventType()} source: ${event.getAction().source.getId()}, target: ${event.getAction().target.getId()}`)
       this.eventQueue.push(event)
   }
 
@@ -37,7 +37,7 @@ export class QuantumNetwork{
   }
   
   // cycle(){
-  //   console.log(logData(`Cycle ${this.cycleCounter} done`))
+  //   logData(`Cycle ${this.cycleCounter} done`)
   //   ++this.cycleCounter
   //   //setTimeout(() => this.handleEvents(), 1000 /* miliseconds */)
   //   this.handleEvents()
@@ -125,7 +125,7 @@ export class QuantumNetwork{
   }
 
   onTerminate() {
-    console.log(logData(`--------------`))
+    logData(`--------------`)
     logStat(`--------------`)
     const numberOfSuccessfullPaths = this.successfullPaths.length
     let pathLengths = ''
@@ -136,8 +136,8 @@ export class QuantumNetwork{
       pathLengths += this.successfullPaths[i].split(' ').length - 2 + ' '
     }
     //this.path.target.receiver.receive(this.path)
-    console.log(logVis(`${numberOfSuccessfullPaths} ${pathLengths} `))
-    //console.log(logVis(`${pathLenghts} `))
+    logVis(`${numberOfSuccessfullPaths} ${pathLengths} `)
+    //logVis(`${pathLenghts} `)
     this.logGraph(pathLengths)
   }
 
@@ -147,7 +147,7 @@ export class QuantumNetwork{
         `while doing an EXTERNAL event from repeater ${event.getAction().source.getId()} to ${event.getAction().target.getId()} `
       : `while doing an INTERNAL event from QM ${event.getAction().source.getId()} to ${event.getAction().target.getId()} `
     
-    console.log(logStat(`Dead Path: ${event.getMessage().visited.reduce((output, repeater) => output + repeater.name + ' ', ' ')} died ${reason} `))
+    logStat(`Dead Path: ${event.getMessage().visited.reduce((output, repeater) => output + repeater.name + ' ', ' ')} died ${reason} `)
   }
 
   handleDone(event){
@@ -155,9 +155,10 @@ export class QuantumNetwork{
     
     const message = event.getMessage()
     this.path = message
-    console.log(logStat(`^^^^^^Path: ${message.visited.reduce((output, repeater) => output + repeater.name + ' ', '')}. Content received: '${message.content}'`))
+    logStat(`^^^^^^Path: ${message.visited.reduce((output, repeater) => output + repeater.name + ' ', '')}. Content received: '${message.content}'`)
     //console.log(`^^^^^^packetNum: ${message.packetNumber}`)
-    console.log(logVis(`^^^^^^packetNum: ${message.packetNumber}`))
+    logVis(`^^^^^^packetNum: ${message.packetNumber}`)
+    console.log(`^^^^^^packetNum: ${message.packetNumber}`)
     if (message.type === 'ACK'){
       //message.target.sender.receiveACK(message)
       message.target.onReceivedACK(message)

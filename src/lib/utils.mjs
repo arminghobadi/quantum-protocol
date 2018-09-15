@@ -78,32 +78,33 @@ export function calculateLossQ(message /* Object */){
 
 export function deadPath(message /* Object */, failurePoing /* Object */){
   const reason = `while doing an ${failurePoing.actionType} event from ${failurePoing.actionType === 'EXTERNAL' ? 'repeater' : 'QM'} ${failurePoing.source.getId()} to ${failurePoing.target.getId()}`
-  console.log(logData(`->Path ${message.visited.reduce((output, repeater) => output + repeater.name + ' ', '')} died ${reason}`))
+  logData(`->Path ${message.visited.reduce((output, repeater) => output + repeater.name + ' ', '')} died ${reason}`)
 }
 
 export function logData(data){
   // fs.appendFile('log.txt', `${data}\n`, 'utf8', (err) => {
   //   if (err) console.log(err.message)
   // })
-  return data
+  //console.log(data)
 }
 
 export function logStat(data){
   // fs.appendFile('stat.txt', `${data}\n`, 'utf8', (err) => {
   //   if (err) console.log(err.message)
   // })
-  return data
+  //console.log(data)
 }
 
 export function logVis(data){
   // fs.appendFile('vis.txt', `${data}\n`, 'utf8', (err) => {
   //   if (err) console.log(err.message)
   // })
-  return data
+  //console.log(data)
 }
 
 export function logGraph(data){
   // fs.appendFileSync('graph.txt', `${data}\n`, 'utf8', (err) => {
   //   if (err) console.log(err.message)
   // })
+  //console.log(data)
 }

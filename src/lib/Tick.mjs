@@ -22,7 +22,7 @@ export class Tick{
 
   tick(){
     this.tickHistory.push(this.tickFunc)
-    console.log(logData(`- Doing tick # ${this.tickHistory.length}`))
+    logData(`- Doing tick # ${this.tickHistory.length}`)
     this.tickListeners.forEach(
       (listener) =>
         --listener.tickNum === 0 ? this.execTickListener(listener) : ()=>{} // not sure --listener.tickNum or listener.tickNum--

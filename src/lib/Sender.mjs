@@ -45,7 +45,7 @@ export class Sender{
     // for ( var i = 0 ; i < this.messages.length ; i++){
     //   this.send(this.messages[i])
     // }
-    //console.log(logVis(this.messages.length + " brrrrrrrrr")) length is 35
+    //logVis(this.messages.length + " brrrrrrrrr") length is 35
 
   }
 
@@ -67,11 +67,12 @@ export class Sender{
       this.send(message)
     } 
     else {
-      console.log(logData(logStat('ACK received already')))
+      logData(logStat('ACK received already'))
     }
   }
 
   send(message){
+    //debugger
     this.sentMessages.push({
       message,
       timeout: ticker().setTickListener({ tickNum: ticker().getTcpTimeoutTickNum(), fun: () => this.handleTimeout(message), id: generateId() })
