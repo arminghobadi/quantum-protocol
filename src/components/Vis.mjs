@@ -3,7 +3,12 @@ import React, { Component } from 'react';
 var cytoscape = require('cytoscape');
 
 export class Vis extends Component {
-  dothing(){
+  
+  state = {
+    firstRender: true,
+  }
+
+  componentDidUpdate(){
     const r1 = new Repeater('Repeater1', 4, 1)
     const r2 = new Repeater('Repeater2', 4, 2)
     const l1 = new Link(r1, r2, r1.getQM(2), r2.getQM(4), 1)
@@ -12,7 +17,7 @@ export class Vis extends Component {
 
     var container =  this.refs.test
     //debugger
-    //container.style.height = '100vh'
+    container.style.height = '100vh'
 
     var cy = cytoscape({
       
@@ -80,9 +85,12 @@ export class Vis extends Component {
 
 
   render() {
+    if (this.state.firstRender === true){
+      this.setState({ firstRender: false })
+    }
     return (
       <div className="test" id="test" ref="test">
-        {this.dothing()}
+        
         
       </div>
     );

@@ -391,10 +391,8 @@ for (var i = 0 ; i < 1/*stringToBinary.length*/ ; i++) {
 // to paste all the cytoscape shit, paste it between these //
 /////
 
-
 ReactDOM.render(
   <div>
-    armin
     <App/>
   </div>,
   document.getElementById('root')
