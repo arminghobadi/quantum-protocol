@@ -4,6 +4,7 @@ import { logStat } from "./utils.mjs";
 import { convertStringToBinary } from "./utils.mjs";
 import { generateId, ticker } from "./utils.mjs";
 import { logVis } from "./utils.mjs";
+import { ML } from './ML.mjs'
 
 export class Sender{
   constructor({ senderRepeater /* Repeater */, network /* QuantumNetwork */, receiverRepeater /* Repeater */, window /* Window */ }){
@@ -73,6 +74,7 @@ export class Sender{
 
   send(message){
     //debugger
+    //console.log(ML.getLinkSuccessRate())
     this.sentMessages.push({
       message,
       timeout: ticker().setTickListener({ tickNum: ticker().getTcpTimeoutTickNum(), fun: () => this.handleTimeout(message), id: generateId() })

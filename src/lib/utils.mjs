@@ -13,6 +13,8 @@ export function ticker(){
   return tickRef;
 }
 
+
+
 /**
  * For P = 6 and Q = 9 and a 4x4 grid of a network, usually one path is successfull, resulting around 30 cycles.
  * The receiver usually receives the data around 2 or 3 times. Same thing with the sender.
