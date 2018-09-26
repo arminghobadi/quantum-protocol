@@ -1,6 +1,7 @@
 import fs from 'fs'
 import { getRandomNumberWithProbability } from './actions'
 import { Tick } from './Tick.mjs';
+import { ML } from './ML.mjs';
 
 const P_LOSS_CHANCE_ = 3 // From 1 to 10
 const Q_LOSS_CHANCE_ = 3 // From 1 to 10
@@ -10,7 +11,13 @@ const Q_SUCCESS_RATE_ = 9//9
 const tickRef = new Tick()
 
 export function ticker(){
-  return tickRef;
+  return tickRef
+}
+
+const mlRef = new ML()
+
+export function ml(){
+  return mlRef
 }
 
 

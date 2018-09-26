@@ -10,22 +10,31 @@ export class ML{
    * linkSuccessRate = [ {linkName:ln, success:0.4}, {linkName:ln, success: 0.5} ]
    */
 
-  static getLinkSuccess(){
+  getLinkSuccess(){
     return this.linkSuccess
   }
 
-  static getLinkSuccessRate() {
+  getLinkSuccessRate() {
     return this.linkSuccessRate
   }
 
-  static addLinkScussecc({linkName, success}){
-    linkSuccess.add({linkName, success: this.linkSuccess.success.add(success)})
+  pushLinkSuccess({linkName, success}){
+    debugger
+    if (!this.linkSuccess.find((el)=>el.linkName === linkName)){
+      this.linkSuccess.push({linkName, success: []})
+    }
+    this.linkSuccess.find((el)=> el.linkName === linkName ).success.push(success)
+    //this.linkSuccess.push({linkName, success: this.linkSuccess.success.push(success)})
+    console.log(this.linkSuccess.length)
+    this.calculateLinkSuccessRate()
   }
   
-  static calculateLinkSuccessRate(){
+  calculateLinkSuccessRate(){
+    this.linkSuccessRate = []
     this.linkSuccess.forEach(ls /* LinkSuccess */ => {
-      this.linkSuccessRate.add({ linkName: ls.linkName, success: ls.success.reduce((el, nextEl)=>{el+nextEl})/ls.success.length })
+      this.linkSuccessRate.push({ linkName: ls.linkName, success: (ls.success.reduce((el, nextEl)=>{el+nextEl}))/ls.success.length })
     })
+    console.log(this.linkSuccessRate)
   }
 
 }

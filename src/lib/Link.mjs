@@ -1,5 +1,6 @@
-import { PSuccessRate, deadPath, generateId } from './utils'
+import { PSuccessRate, deadPath, generateId, ml } from './utils'
 import { Event } from './Event'
+import { ML } from './ML'
 
 export class Link {
 	constructor(end1 /* Repeater */, end2 /* Repeater */, sourceQM /* QuantumMemory */, targetQM /* QuantumMemory */, id /* Integer */){
@@ -18,9 +19,11 @@ export class Link {
 		} 
 		else {
 			if (PSuccessRate()){
+				ml().pushLinkSuccess({linkName: this.getName(), success: 1})
 				return this.otherEnd(source).receive(message, this.getTargetQM(this.otherEnd(source)))
 			}
 			else {
+				ml().pushLinkSuccess({linkName: this.getName(), success: 0})
 				return [new Event('DEAD', { source: source, target: this.otherEnd(source), link: this }, generateId(), message)]
 				//deadPath(message, { actionType: 'EXTERNAL', source: source, target: this.otherEnd(source) } )
 			}
