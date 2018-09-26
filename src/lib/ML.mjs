@@ -7,7 +7,7 @@ export class ML{
 
   /**
    * linkSuccess = [ {linkName:ln, success:[0,0,0,1,1,1]}, {linkName:ln, success:[1,1,0,0,1]} ]
-   * linkSuccessRate = [ {linkName:ln, success:0.4}, {linkName:ln, success: 0.5} ]
+   * linkSuccessRate = [ {linkName:ln, success:0.5}, {linkName:ln, success: 0.6} ]
    */
 
   getLinkSuccess(){
@@ -19,7 +19,6 @@ export class ML{
   }
 
   pushLinkSuccess({linkName, success}){
-    debugger
     if (!this.linkSuccess.find((el)=>el.linkName === linkName)){
       this.linkSuccess.push({linkName, success: []})
     }
@@ -32,7 +31,7 @@ export class ML{
   calculateLinkSuccessRate(){
     this.linkSuccessRate = []
     this.linkSuccess.forEach(ls /* LinkSuccess */ => {
-      this.linkSuccessRate.push({ linkName: ls.linkName, success: (ls.success.reduce((el, nextEl)=>{el+nextEl}))/ls.success.length })
+      this.linkSuccessRate.push({ linkName: ls.linkName, success: (ls.success.reduce((sum, next) => sum + next)) / ls.success.length })
     })
     console.log(this.linkSuccessRate)
   }
