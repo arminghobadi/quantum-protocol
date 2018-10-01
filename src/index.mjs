@@ -164,9 +164,8 @@ for (var i = 0 ; i < 1/*stringToBinary.length*/ ; i++) {
 		links
 	})
 	//const receiver = new Receiver(message.target, qn)
-	
 
-	const sender = new Sender({senderRepeater: message.source, network: qn, receiverRepeater: message.target, window: new Window() }).generateMessage('a') // send(message)?? get rid of this shit dude! 
+	const sender = new Sender({senderRepeater: message.source, network: qn, receiverRepeater: message.target, window: new Window() }).generateMessage('ar') // send(message)?? get rid of this shit dude! 
 	// if (!window.addWindowEvent(new Sender(r1, qn, message).send)){
 	// 	setTimeout(() => this, 1000 /* miliseconds */)
 	// }

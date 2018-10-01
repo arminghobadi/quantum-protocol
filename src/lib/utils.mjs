@@ -6,7 +6,7 @@ import { ML } from './ML.mjs';
 const P_LOSS_CHANCE_ = 3 // From 1 to 10
 const Q_LOSS_CHANCE_ = 3 // From 1 to 10
 const P_SUCCESS_RATE_ = 6//6 // 0-> all fail ; 10 -> all success
-const Q_SUCCESS_RATE_ = 9//9
+const Q_SUCCESS_RATE_ = 8//9
 
 const tickRef = new Tick()
 

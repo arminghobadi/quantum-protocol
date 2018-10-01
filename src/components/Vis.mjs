@@ -203,7 +203,7 @@ export class Vis extends Component {
           })
         .selector('edge')
           .css({
-            
+            'content': 'data(id)',
             'target-arrow-shape': 'triangle',
             'width': 4,
             'line-color': '#ddd',
