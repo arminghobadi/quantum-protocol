@@ -1,6 +1,8 @@
 import { generateId, calculateLossP, logData, PSuccessRate } from './utils'
 import { QuantumMemory } from './QuantumMemory'
 import { Event } from './Event'
+import { ml } from './utils.mjs';
+
 
 export class Repeater {
 	//getQM() and list of QMs are never used! Should they be there??
@@ -44,15 +46,24 @@ export class Repeater {
 	}
 
 	findLinksToEmitMessage( message ){
-		let links = []
+		let connectedLinks = []
+		let finalLinks = []
 		this.links
 			.filter(link =>
 				!message.visited.includes(link.otherEnd(this)))
 			.forEach(link =>
 				{
-					links.push(link)
+					connectedLinks.push({ link, success: ml().getLinkSuccessRate(link)})
 			})
-		return links
+		connectedLinks.sort( (el, nextEl)=> nextEl.success - el.success )
+		if (connectedLinks.length > 1){
+			finalLinks.push(connectedLinks[0].link)
+			finalLinks.push(connectedLinks[1].link)
+		}
+		else {
+			connectedLinks.length === 1 ? finalLinks.push(connectedLinks[0].link) : ()=>{}
+		}
+		return finalLinks
 	}
 
 	/**	receivedACK(){}

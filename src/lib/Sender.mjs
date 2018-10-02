@@ -17,6 +17,7 @@ export class Sender{
     this.window = window
     this.sentPackets = 0
     this.onFlightMessages = []
+    this.counter = 0
     ticker().setTickFunc(() => this.network.handleEvents())
   }
 
@@ -73,8 +74,8 @@ export class Sender{
   }
 
   send(message){
+    //console.log(this.counter++ + 'bbbbbb')
     //debugger
-    //console.log(ML.getLinkSuccessRate())
     this.sentMessages.push({
       message,
       timeout: ticker().setTickListener({ tickNum: ticker().getTcpTimeoutTickNum(), fun: () => this.handleTimeout(message), id: generateId() })

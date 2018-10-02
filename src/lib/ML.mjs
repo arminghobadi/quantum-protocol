@@ -14,8 +14,11 @@ export class ML{
     return this.linkSuccess
   }
 
-  getLinkSuccessRate() {
-    return this.linkSuccessRate
+
+  // we imagine anylink that is not visited yet, the success rate is 1. ( TODO: should i assume this? )
+  getLinkSuccessRate(link) {
+    const el = this.linkSuccessRate.find((el)=> el.linkName === link.getName() )
+    return el ? el.success : 1
   }
 
   pushLinkSuccess({linkName, success}){
@@ -32,9 +35,10 @@ export class ML{
     this.linkSuccessRate = []
     this.linkSuccess.forEach(ls /* LinkSuccess */ => {
       this.linkSuccessRate.push({ linkName: ls.linkName, success: (ls.success.reduce((sum, next) => sum + next)) / ls.success.length })
-      console.log(ls.success.length)
+      //console.log(ls.success.length)
     })
     console.log(this.linkSuccessRate)
   }
+
 
 }
