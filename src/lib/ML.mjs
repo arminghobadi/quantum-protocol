@@ -15,7 +15,7 @@ export class ML{
   }
 
 
-  // we imagine anylink that is not visited yet, the success rate is 1. ( TODO: should i assume this? )
+  // we imagine anylink that is not visited yet, has a success rate of 1. ( TODO: should i assume this? )
   getLinkSuccessRate(link) {
     const el = this.linkSuccessRate.find((el)=> el.linkName === link.getName() )
     return el ? el.success : 1

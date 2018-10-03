@@ -1,4 +1,5 @@
 import { logData } from "./utils.mjs";
+import { getEventQueueLength } from "./utils.mjs";
 
 export class Tick{
 
@@ -29,7 +30,7 @@ export class Tick{
       )
     this.counter.forEach( () => this.tickListeners.pop() )
     this.counter = []
-    this.tickFunc()
+    setTimeout(() => this.tickFunc(), 0)
   }
 
   

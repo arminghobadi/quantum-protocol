@@ -46,24 +46,36 @@ export class Repeater {
 	}
 
 	findLinksToEmitMessage( message ){
-		let connectedLinks = []
-		let finalLinks = []
+		// Without the ML:
+		let links = []
 		this.links
 			.filter(link =>
 				!message.visited.includes(link.otherEnd(this)))
 			.forEach(link =>
 				{
-					connectedLinks.push({ link, success: ml().getLinkSuccessRate(link)})
+					links.push(link)
 			})
-		connectedLinks.sort( (el, nextEl)=> nextEl.success - el.success )
-		if (connectedLinks.length > 1){
-			finalLinks.push(connectedLinks[0].link)
-			finalLinks.push(connectedLinks[1].link)
-		}
-		else {
-			connectedLinks.length === 1 ? finalLinks.push(connectedLinks[0].link) : ()=>{}
-		}
-		return finalLinks
+		return links
+
+		// With ML
+		// let connectedLinks = []
+		// let finalLinks = []
+		// this.links
+		// 	.filter(link =>
+		// 		!message.visited.includes(link.otherEnd(this)))
+		// 	.forEach(link =>
+		// 		{
+		// 			connectedLinks.push({ link, success: ml().getLinkSuccessRate(link)})
+		// 	})
+		// connectedLinks.sort( (el, nextEl)=> nextEl.success - el.success )
+		// if (connectedLinks.length > 1){
+		// 	finalLinks.push(connectedLinks[0].link)
+		// 	finalLinks.push(connectedLinks[1].link)
+		// }
+		// else {
+		// 	connectedLinks.length === 1 ? finalLinks.push(connectedLinks[0].link) : ()=>{}
+		// }
+		// return finalLinks
 	}
 
 	/**	receivedACK(){}
