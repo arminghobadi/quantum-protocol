@@ -27,7 +27,7 @@ export class ML{
     }
     this.linkSuccess.find((el)=> el.linkName === linkName ).success.push(success)
     //this.linkSuccess.push({linkName, success: this.linkSuccess.success.push(success)})
-    console.log(this.linkSuccess)
+    //console.log(this.linkSuccess)
     this.calculateLinkSuccessRate()
   }
   
@@ -37,7 +37,7 @@ export class ML{
       this.linkSuccessRate.push({ linkName: ls.linkName, success: (ls.success.reduce((sum, next) => sum + next)) / ls.success.length })
       //console.log(ls.success.length)
     })
-    console.log(this.linkSuccessRate)
+    //console.log(this.linkSuccessRate)
   }
 
 

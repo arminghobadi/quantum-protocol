@@ -40,26 +40,34 @@ export class Window{
   }
 
   messageDelivered() {
+    // if doubleing the size of window allowance is more than the max size, just set it to be the max size
+    // and update the peak value
     if (this.windowAllowance*2 >= this.MAX_WINDOW_SIZE_){
       this.windowAllowance = this.MAX_WINDOW_SIZE_
     }
     else{
       if (this.windowPeakValue === 0){
-        if (this.windowAllowance !== this.MAX_WINDOW_SIZE_) this.windowAllowance*=2
+        if (this.windowAllowance !== this.MAX_WINDOW_SIZE_) {
+          this.windowAllowance*=2
+          this.windowPeakValue = this.windowAllowance
+        }
       }
       else {
         if (this.windowAllowance < this.windowPeakValue) this.windowAllowance*=2
         else this.windowAllowance++
       }
     }
+    this.windowPeakValue = this.windowAllowance
     this.readyForNextMessage(this.windowAllowance)
   }
 
   messageLost() {
     if (this.windowPeakValue === 0){
+      console.log('damn it') //////////
       return
     }
     this.windowPeakValue = this.windowAllowance
     this.windowAllowance = this.windowPeakValue/2
+    this.readyForNextMessage(this.windowAllowance)
   }
 }

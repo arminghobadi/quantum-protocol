@@ -38,6 +38,7 @@ export class Sender{
         // }
         this.onFlightMessages.forEach(msg => {msg.packetNumber ? (()=>{/*debugger;*/ this.send(msg)})() : this.send(msg)}) //TODO: fix this mf
       else {
+        debugger
         ticker().setTerminate(true)
         this.window.stop()
       }
@@ -65,6 +66,7 @@ export class Sender{
   handleTimeout(message){
     if (!this.sentMessages.find( x => x.message.id === message.id ) && !this.onFlightMessages.find(x => x.id === message.content )) debugger
     if (this.sentMessages.find( x => x.message.id === message.id )){
+      debugger
       this.window.messageLost()
       this.send(message)
     } 
@@ -87,6 +89,7 @@ export class Sender{
     //       this.handleTimeout(message)
     //     }, TIMEOUT_) 
     // })
+    console.log(`sender is sending packet number ${message.packetNumber}`)
     this.network.run(message)
     //this.receiveACK(message)
   }
@@ -95,6 +98,7 @@ export class Sender{
   // when ack received, i should delete the approprieate windowEvent from windowEventQueue, then call the `sendNextPackage()`
   // i should also increase the window size. also, when timeout happens, window should be aware of that
   receiveACK(message){
+    console.log(`server received packet number ${message.packetNumber}`)
     //this.window.messageDelivered()
     const element = this.sentMessages.find(x => x.message.id === message.content)
     //if (this.onFlightMessages.find(x => x.id === message.content )) debugger

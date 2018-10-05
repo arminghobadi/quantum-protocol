@@ -88,6 +88,7 @@ export class QuantumNetwork{
       /*this.cycle()*/ ticker().tick()
     }
     else if ( ticker().getTerminate() ){
+      console.log('terminate')
       this.onTerminate()
     }
     else{
